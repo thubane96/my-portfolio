@@ -1,0 +1,135 @@
+<div class="block">
+  <div class="container">
+    <div class="image">
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="big-bird">
+        <g>
+          <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z">
+
+          </path>
+        </g>
+      </svg>
+    </div>
+
+    <div class="content">
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="small-bird">
+        <g>
+          <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z">
+
+          </path>
+        </g>
+      </svg>
+
+      <div *ngIf="isChanged === 'home'">
+        <h1>Happening now</h1>
+        <h3>Join Twitter today.</h3>
+
+        <div class="button">
+          <a class="btn btn-signup" (click)="onChange('signup')">Sign up</a>
+          <a class="btn btn-login" (click)="onChange('login')">Log in</a>
+        </div>
+      </div>
+
+      <div style="margin-left: 20px;" *ngIf="isChanged === 'signup'">
+        <mat-card>
+          <div *ngIf="signupError">
+            <div style="background-color: red;margin-bottom: 20px; text-align: center;" class="alert alert-danger">
+              User with that username already exist
+            </div>
+          </div>
+          <div *ngIf="signupSuccessful">
+            <div style="background-color: yellow;margin-bottom: 20px; text-align: center;" class="alert alert-info">
+              Successfully signed up
+            </div>
+          </div>
+          <form style="margin-top: 20px;" class="example-form" #signupForm="ngForm" (ngSubmit)="onSignup(signupForm)">
+            <table>
+              <tr>
+                <td>
+                  <div  class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" name="firstName" ngModel>
+                    <label  for="floatingInput">First name</label>
+                  </div>
+                </td>
+                <td>
+                  <div style="margin-left: 10px;" class="form-floating mb-3">
+                    <input style="width: 240px;" type="text" class="form-control" id="floatingInput" name="lastName" ngModel>
+                    <label  for="floatingInput">Last name</label>
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <div  class="form-floating mb-3">
+              <input type="Email" class="form-control" id="floatingInput" name="username" ngModel>
+              <label  for="floatingInput">Mobile number or email address</label>
+            </div>
+            <div  class="form-floating mb-3">
+              <input type="password" class="form-control" id="floatingInput" name="password" ngModel>
+              <label  for="floatingInput">Password</label>
+            </div>
+            <p style="font-size: 13px;">By clicking Sign Up, you agree to our <a href="">Terms, </a><a href="">Data Policy</a> and
+              <a > Cookie Policy.</a></p>
+            <p style="font-size: 13px;">Already have an account?..then <a href="#" (click)="onChange('login')">Signin</a></p>
+              <hr>
+              <div class="center">
+                <button style="width: 190px; height: 50px;" type="submit" class="btn bg-dark text-white" data-dismiss="modal">Sign up</button>
+              </div>
+          </form>
+
+        </mat-card>
+      </div>
+
+      <div style="margin-left: 80px;" *ngIf="isChanged === 'login'">
+        <mat-card>
+          <div *ngIf="progressBar === true">
+            <mat-progress-bar style="height: 5px;" mode="indeterminate"></mat-progress-bar>
+          </div>
+          <form style="margin-top: 20px;" class="example-form" #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
+            <div class="login">
+              <div style="width: 320px;" class="form-floating mb-3">
+                <input name="username" type="text" class="form-control" id="floatingInput" ngModel>
+                <label style="font-size: 20px;" for="floatingInput">Email address or phone number</label>
+              </div>
+              <div style="width: 320px;" class="form-floating mb-3">
+                <input name="password" type="password" class="form-control" id="floatingInput0" ngModel>
+                <label style="font-size: 20px;" for="floatingInput0">Password</label>
+              </div>
+              <button style="width: 320px; height: 50px; font-size: 20px;" type="submit"
+              class="btn bg-dark text-white" >Log In</button>
+            </div>
+          </form>
+        
+          <hr style="width: 330px; margin-left: 35px;">
+
+          <div class="center">
+            <button class="btn bg-light text-dark" style="width: 190px; height: 50px; background-color: #42b72a;font-size: 15px;" (click)="onChange('signup')">Create New Account</button>
+          </div>
+          
+        </mat-card>
+      </div>
+    </div>
+
+    
+
+    <div class="footer">
+      <nav>
+        <a href="#">About</a>
+        <a href="#">help center</a>
+        <a href="#">terms of service</a>
+        <a href="#">privacy policy</a>
+        <a href="#">cookie policy</a>
+        <a href="#">ads info</a>
+        <a href="#">blog</a>
+        <a href="#">status</a>
+        <a href="#">careers</a>
+        <a href="#">brand resources</a>
+        <a href="#">advertising</a>
+        <a href="#">merketing</a>
+        <a href="#">twitter for business</a>
+        <a href="#">developers</a>
+        <a href="#">directory</a>
+        <a href="#">settings</a>
+        <div>&copy; 2021 Twitter, Inc.</div>
+      </nav>
+    </div>
+  </div>
+</div>

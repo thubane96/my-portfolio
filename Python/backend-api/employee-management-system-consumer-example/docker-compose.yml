@@ -1,0 +1,69 @@
+version: "3"
+services:
+  admin-api:
+    platform: linux/amd64
+    container_name: admin-api
+    build: admin-api/.
+    ports:
+      - 8000:8000
+    volumes:
+      - ./admin-api:/usr/src/app
+    env_file:
+      - ./admin-api/.env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - admin-api-postgres
+
+  admin-api-postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=admindb
+    volumes:
+      - admin-postgres-db:/var/lib/postgresql/data
+  employee-api:
+    platform: linux/amd64
+    container_name: employee-api
+    build: employee-api/.
+    ports:
+      - 8080:8080
+    volumes:
+      - ./employee-api:/usr/src/app
+    env_file:
+      - ./employee-api/.env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload
+    depends_on:
+      - employee-api-postgres
+
+  employee-api-postgres:
+    image: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=employeedb
+    volumes:
+      - employee-postgres-db:/var/lib/postgresql/data
+  admin-consumer:
+    platform: linux/amd64
+    container_name: admin-consumer
+    build: admin-consumer/.
+    volumes:
+      - ./admin-consumer:/usr/src/app
+    env_file:
+      - ./admin-consumer/.env
+
+  employee-consumer:
+    platform: linux/amd64
+    container_name: employee-consumer
+    build: employee-consumer/.
+    volumes:
+      - ./employee-consumer:/usr/src/app
+    env_file:
+      - ./employee-consumer/.env
+
+volumes:
+  admin-postgres-db:
+  employee-postgres-db:

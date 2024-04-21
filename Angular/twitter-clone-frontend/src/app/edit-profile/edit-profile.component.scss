@@ -1,0 +1,172 @@
+body {
+    --twitter-color: #50b7f5;
+    --twitter-background: #e6ecf0;
+}
+  
+.feed {
+    flex: 0.5;
+    border-right: 1px solid var(--twitter-background);
+    min-width: fit-content;
+    // overflow-y: scroll;
+    float: left;
+    width: 60%;
+}
+
+.feed_header {
+  position: fixed;
+  width: 46.6%;
+    top: 0;
+    background-color: white;
+    z-index: 100;
+    border: 1px solid var(--twitter-background);
+    padding: 15px 20px;
+}
+
+.feed_header h2 {
+    font-size: 20px;
+    font-weight: 800;
+}
+   
+   
+/* profile */
+
+
+.profile {
+    margin-left: 0px;
+    margin-top: 80px;
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--twitter-background);
+    padding-bottom: 10px;
+}
+
+
+*{
+    margin:0px;
+    padding:0px;
+    box-sizing: border-box;
+}
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: #dfdfdf;
+}
+.wrapper{
+    width: 640px;
+} 
+.main-wrapper {
+    background-image: url("/assets/img/fortnite.jpg");
+    background-position: 0 50%;
+    background-size: 100% auto;
+    border-radius: 4px 4px 0px 0px;
+    height:200px;
+    width:100%;
+}
+#profile-link{
+    background-color: #fff;
+    border-radius: 6px;
+    display: inline-block;
+    float: left;
+    margin:-30px 5px 0px 8px;
+    max-width:100%;
+    padding:1px;
+    vertical-align: bottom;
+}
+#profile-img{
+    border:2px solid #fff;
+    border-radius: 7px;
+    color:#fff;
+    height:72px;
+    width:72px;
+}
+#profile-marg{
+    margin:5px 0px 0px;
+}
+#profile-name{
+    font-size:18px;
+    font-weight: 700;
+    line-height: 21px;
+}
+#profile-name a{
+    color:inherit;
+}
+#profile-state{
+    padding:15px;
+}
+#profile-Arrange{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin:0;
+    min-width:100%;
+    padding:0px;
+}
+ul#profile-Arrange{
+    list-style: none;
+    margin:0;
+    padding:0;
+}
+#profile-details a:hover{
+    text-decoration: none;
+}
+#profile-number{
+    display: block;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.15s ease-in-out 0s;
+}
+#profile-label{
+    color:#8899a6;
+    font-size:10px;
+    letter-spacing: 0.02em;
+    overflow: hidden;
+    text-transform: uppercase;
+    transition: color 0.15s ease-in-out 0s;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .3s ease;
+}
+
+.container:hover .overlay {
+    opacity: 1;
+}
+
+.icon {
+    font-size: 100px;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50);
+    text-align: center;
+}
+
+.icon>input {
+    display: none;
+}
+
+.material-icons:hover {
+    color: #eee;
+}
+
+.updateBox {
+    margin-left: 20px;
+    margin-top: 10px;
+}

@@ -1,0 +1,104 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <p class="navbar-brand">DAILY JOURNAL</p>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li id="home"><a class="btn" data-bs-toggle="modal" data-bs-target="#composeModal">COMPOSE</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- COMPOSE MODAL -->
+  <div class="modal fade" id="composeModal" tabindex="-1" aria-labelledby="composeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">COMPOSE</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form #addForm="ngForm" (ngSubmit)="onAddPost(addForm)" >
+          <div class="modal-body">
+
+            <div class="form-group">
+              <label>Title</label>
+              <input class="form-control" type="text" ngModel name="title">
+              <label>Post</label>
+              <textarea class="form-control" ngModel name="body" rows="5" cols="30"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button [disabled]="addForm.invalid" type="submit"  class="btn btn-primary" data-bs-dismiss="modal">Publish</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>Home</h1>
+    <p>Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut.</p>
+
+    <div style="height: 400px;" class="ScrollStyle">
+
+      <div *ngFor="let post of posts">
+        <div class="card">
+          <div class="card-body">
+            <button style="margin-right: 25px;" (click)="onOpenModal(post, 'edit')" class="btn position-absolute top-0 end-0" data-bs-toggle="modal" data-bs-target="#editComposeModal"><fa-icon [icon]="faEdit"></fa-icon></button>
+            <button style="margin-right: 5px;margin-top: 8px;" (click)="onOpenModal(post, 'delete')" class="btn-close position-absolute top-0 end-0" data-bs-toggle="modal" data-bs-target="#deleteComposeModal"></button>
+            <h1>{{post.title}}</h1>
+            <p>{{post.body}}</p>
+            <p style="margin-right: 20px;" class="position-absolute bottom-0 end-0">{{post.time}}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- EDIT COMPOSE MODAL -->
+    <div class="modal fade" id="editComposeModal" tabindex="-1" aria-labelledby="editComposeModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">EDIT COMPOSE</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form #editForm="ngForm">
+            <div class="modal-body">
+              <div class="form-group">
+                <input type="hidden" ngModel="{{editPost?.id}}" name="id" class="form-control" id="id" placeholder="Email">
+                <label>Title</label>
+                <input ngModel="{{editPost?.title}}" class="form-control" type="text" name="title">
+                <label>Post</label>
+                <textarea ngModel="{{editPost?.body}}" class="form-control" name="body" rows="5" cols="30"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button (click)="onUpdatePost(editForm.value)" class="btn btn-primary" data-bs-dismiss="modal">Publish</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELETE COMPOSE MODAL -->
+    <div class="modal fade" id="deleteComposeModal" tabindex="-1" aria-labelledby="deleteComposeModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h5>Are you sure you want to delete this post?</h5>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button (click)="onDeletePost(deletePost?.id)" class="btn btn-danger" data-bs-dismiss="modal">Delete post</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-padding"></div>
+  <div class="footer">
+    <p>Made with ❤️ by ICODE</p>
+  </div>

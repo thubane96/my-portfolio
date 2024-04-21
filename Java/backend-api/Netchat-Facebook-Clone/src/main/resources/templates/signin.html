@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" th:href="@{/css/signin.css}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap" rel="stylesheet">
+
+</head>
+<body style="background-color: #EEEEEE;">
+  <div style="background-color: #EEEEEE;" class="signin-page">
+    <div style="background-color: #EEEEEE;" class="signin-container">
+      <div class="container signin-inside-container">
+        <div class="row">
+          <div class="col-md-6 signin-left-side">
+            <div style=" margin-top: 70px;" class="singin-left">
+              <div class="singin-heading">
+                <h1 style="font-size: 70px">Netchat</h1>
+              </div>
+              <div class="singin-left-content">
+                <h4>Netchat  helps  you  connect  and  share  with  the  people  around  the  world.</h4>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 signin-right-side">
+            <div class="">
+              <div th:if="${param.error}">
+                <div style="text-align: center;" class="alert alert-danger">Invalid username or
+                  password.</div>
+                </div>
+              </div>
+            <div th:if="${param.success}">
+              <div style="background-color: yellow;margin-bottom: 20px; text-align: center;" class="alert alert-info">
+                Successfully signed up
+              </div>
+            </div>
+              <div class="card align-items-center text-center" style="width: 396px;">
+                <form th:action="@{/signin}" method="post" style="margin-top: 20px;" class="example-form">
+                  <div style="width: 320px;" class="form-floating mb-3">
+                    <input name="username" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+                    <label style="font-size: 20px;" for="floatingInput">Email address or phone number</label>
+                  </div>
+                  <div style="width: 320px;" class="form-floating mb-3">
+                    <input name="password" type="password" class="form-control" id="floatingInput0" placeholder="name@example.com">
+                    <label style="font-size: 20px;" for="floatingInput0">Password</label>
+                  </div>
+                  <button style="width: 320px; height: 50px; font-size: 20px;" type="submit"
+                  class="btn btn-primary">Log In</button>
+                </form>
+                <a style="text-decoration:none; font-size: 14px; margin-top: 15px;" href="#" >Forgotten Password?</a>
+                <hr style="width: 330px; margin-left: 35px;">
+                <button class="btn btn-success" style="width: 190px; height: 50px; background-color: #42b72a;font-size: 15px;">
+                  <a style="text-decoration: none;color: white;" href="/" th:href="@{/signup}">Create New Account</a></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    </body>
+    </html>

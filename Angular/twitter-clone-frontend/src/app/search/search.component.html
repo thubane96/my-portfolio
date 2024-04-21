@@ -1,0 +1,520 @@
+<div class="feed">
+    <div class="feed_header">
+        <div style="float: left;" class="post_avatar">
+            <img [src]="user?.profilePicture" alt="">
+        </div>
+        <div class="widgets_input">
+            <span style="padding-left: 85px;" class="material-icons widgets_searchIcon"> search </span>
+            <input #text type="text" placeholder="Search Twitter" [(ngModel)]="filteredText" >
+        </div>
+    </div>
+
+    <div *ngIf="showSearchedResults === false">
+        <div *ngIf="text.value.length === 0">
+            <div class="search_image">
+                <div class="overlay">
+                    <p>Covid-19 - Live</p>
+                    <h1>Covid-19 in South Africa</h1>
+                </div>
+             </div>
+             <hr style="width: 637px; margin-bottom: 0px;">
+             <div class="trends">
+                 <h3>Trends for you</h3>
+             </div>
+             <hr style="width: 637px; margin-bottom: 0px; margin-top: 5px;">
+             <div class="trend">
+                 <p>Trending in South Africa</p>
+                 <h4>Congratulations Mr Smeg</h4>
+                 <p>1,287 Tweets</p>
+             </div>
+             <hr style="width: 637px; margin-bottom: 0px; margin-top: 5px;">
+             <div class="trend">
+                 <p>Trending in South Africa</p>
+                 <h4>#CanMenSayNoToSex</h4>
+                 <p>11.6k Tweets</p>
+             </div>
+             <hr style="width: 637px; margin-bottom: 0px; margin-top: 5px;">
+             <div class="trend">
+                 <p>Trending in South Africa</p>
+                 <h4>#teengepregnancy</h4>
+                 <p>1,241 Tweets</p>
+             </div>
+             <hr style="width: 637px; margin-bottom: 0px; margin-top: 5px;">
+        </div>
+    
+        <div class="searching_results" *ngIf="text.value.length > 0">
+            <div *ngFor="let tweet of tweets | tweetFilter:filteredText:'tweetBody'" >
+                <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+                <div (click)="viewResults(filteredText)" style="cursor: pointer;" class="post">
+                    <p>{{tweet.tweetBody}}</p>
+                </div>
+                <hr style="width: 637px; margin-bottom: 0px; margin-top: 0px;">
+            </div>
+            <div style="background-color: #e6ecf0; height: 10px;">
+                .
+            </div>
+            <div *ngFor="let user of users | userFilter:filteredText:'firstName'" >
+                <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+                <div [routerLink]="['/profile', user?.id]" style="cursor: pointer;" class="post">
+                    <div class="post_avatar">
+                      <img [src]="user?.profilePicture" alt="">
+                    </div>
+                    <div class="post_body">
+                      <div class="post_header">
+                        <div id="profile-marg">
+                            <div id="profile-name">
+                                <a >{{user?.firstName}} {{user?.lastName}}</a>
+                            </div>
+                            <span>
+                                <a style="color: gray;">@<span>{{user?.firstName}}</span></a>
+                            </span>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <hr style="width: 637px; margin-bottom: 0px; margin-top: 0px;">
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="showSearchedResults === true" class="searched_results">
+        <mat-tab-group class="mat_choices">
+            <mat-tab label="Top"> 
+                <div class="postSection" *ngFor="let tweet of searchedTweets"> 
+                    <div *ngFor="let user of users">
+                        <div *ngIf="tweet?.tweetedBy === user?.username">
+                            <div class="tweet">
+                              <div class="tweet_avatar">
+                                <img [src]="user?.profilePicture" alt="">
+                              </div>
+                            
+                              <div class="tweet_body">
+                                <div class="tweet_header">
+                                  <button style="float: right; font-size: 30px; " mat-button [matMenuTriggerFor]="menu">...</button>
+                                  <mat-menu #menu="matMenu">
+                                    <div class="mat_menu" *ngIf="username === user.username">
+                                      <button (click)="onDeleteTweet(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">delete</mat-icon>
+                                        Delete Tweet
+                                      </button>
+                                      <button *ngIf="tweet?.tweetPinned === false" (click)="onPinTweet(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">push_pin</mat-icon>
+                                        Pin to your profile
+                                      </button>
+                                      <button *ngIf="tweet?.tweetPinned === true" (click)="onPinTweet(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">push_pin</mat-icon>
+                                        Unpin to your profile
+                                      </button>
+                                      <button (click)="onAddTweetToList(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">playlist_add</mat-icon>
+                                        Add/remove from Lists
+                                      </button>
+                                    </div>
+                                    <div class="mat_menu" *ngIf="username !== user.username">
+                                      <button (click)="onHideTweet(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">sentiment_very_dissatisfied</mat-icon>
+                                        Not interested in this Tweet
+                                      </button>
+                                      <button *ngIf="tweet?.userFollowed === false" (click)="onFollowUser(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">person_add</mat-icon>
+                                        Follow @{{user?.firstName}}
+                                      </button>
+                                      <button *ngIf="tweet?.userFollowed === true" (click)="onFollowUser(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">person_add</mat-icon>
+                                        Following @{{user?.firstName}}
+                                      </button>
+                                      <button (click)="onAddTweetToList(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">playlist_add</mat-icon>
+                                        Add/remove from Lists
+                                      </button>
+                                      <button *ngIf="tweet?.userMuted === false" (click)="onMute(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">volume_off</mat-icon>
+                                        Mute @{{user?.firstName}}
+                                      </button>
+                                      <button *ngIf="tweet?.userMuted === true" (click)="onMute(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">volume_off</mat-icon>
+                                        Unmute @{{user?.firstName}}
+                                      </button>
+                                      <button *ngIf="tweet?.userBlocked === false" (click)="onBlock(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">block</mat-icon>
+                                        Block @{{user?.firstName}}
+                                      </button>
+                                      <button *ngIf="tweet?.userBlocked === true" (click)="onBlock(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">block</mat-icon>
+                                        Unblock @{{user?.firstName}}
+                                      </button>
+                                    </div>
+                                  </mat-menu>
+                                  <div class="tweet_headerText">
+                                    <a [routerLink]="['/profile', user?.id]">
+                                      <h3> {{user?.firstName}} {{user?.lastName}}
+                                        <span class="tweet_headerSpecial">
+                                          <span class="material-icons post_badge"> verified </span>@{{user?.firstName}}
+                                        </span>
+                                      </h3>
+                                    </a>        
+                                  </div>
+                                  <div [routerLink]="['/comment', tweet?.id]" style="cursor: pointer;" *ngIf="tweet?.tweetBody !== 'null'" class="tweet_headerDescription">
+                                    <p >{{tweet?.tweetBody}}</p>
+                                  </div>
+                                </div>
+                                <div [routerLink]="['/comment', tweet?.id]" style="cursor: pointer;" *ngIf="tweet?.tweetHasImage === true">
+                                  <img [src]="tweet?.tweetImage" alt="">
+                                </div>    
+                                <div [ngClass]="{put_margin: tweet?.tweetHasImage === true }" class="tweet_time">
+                                  {{ tweet?.time }}
+                                </div>
+                                <hr style="margin-top: 5px;">
+                                <div class="tweet_footer">
+                                  <table>
+                                    <tr>
+                                      <td>
+                                        <div *ngIf="tweet?.isUserLiked === true">
+                                          <button (click)="onLikeTweet(tweet?.id)" mat-icon-button color="warn" aria-label="Example icon button with a heart icon">
+                                            <mat-icon>favorite</mat-icon>
+                                          </button>
+                                        </div>
+                                        <div *ngIf="tweet?.isUserLiked === false">
+                                          <button (click)="onLikeTweet(tweet?.id)" mat-icon-button  aria-label="Example icon button with a heart icon">
+                                            <mat-icon style="color: #50b7f5;">favorite</mat-icon>
+                                          </button>
+                                        </div>
+                                      </td>
+                                      <td>{{ tweet?.likes }}</td>
+                                      <td style="padding-left: 15px;">
+                                        <i [routerLink]="['/comment', tweet?.id]"  style="cursor: pointer; font-size: 23px; color: #50b7f5;" class="fa fa-comment"></i></td>
+                                      <td style="padding-left: 8px;">{{ tweet?.numberOfComments }}</td>
+                                      <td>
+                                        <button mat-icon-button [matMenuTriggerFor]="shareMenu">
+                                          <mat-icon style="color: #50b7f5;">ios_share</mat-icon>
+                                        </button>
+                                        <mat-menu #shareMenu="matMenu">
+                                          <div *ngIf="tweet?.tweetBookmarked === false" class="mat_menu">
+                                            <button (click)="onBookmark(tweet?.id)" mat-menu-item>
+                                              <mat-icon style="color: #50b7f5;">bookmark_add</mat-icon>
+                                              Bookmark
+                                            </button>
+                                          </div>
+                                          <div *ngIf="tweet?.tweetBookmarked === true" class="mat_menu">
+                                            <button (click)="onBookmark(tweet?.id)" mat-menu-item>
+                                              <mat-icon style="color: #50b7f5;">bookmark_add</mat-icon>
+                                              Remove Bookmark
+                                            </button>
+                                          </div>
+                                        </mat-menu>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="searchedTweets.length === 0">
+                    <h2 style="text-align: center; margin-top: 20px;">No tweets were found...</h2>
+                 </div>
+            </mat-tab>
+            <mat-tab label="Latest"> 
+                <div class="postSection" *ngFor="let tweet of searchedTweets"> 
+                    <div *ngFor="let user of users">
+                        <div *ngIf="tweet?.tweetedBy === user?.username">
+                            <div class="tweet">
+                              <div class="tweet_avatar">
+                                <img [src]="user?.profilePicture" alt="">
+                              </div>
+                            
+                              <div class="tweet_body">
+                                <div class="tweet_header">
+                                  <button style="float: right; font-size: 30px; " mat-button [matMenuTriggerFor]="menu">...</button>
+                                  <mat-menu #menu="matMenu">
+                                    <div class="mat_menu" *ngIf="username === user.username">
+                                      <button (click)="onDeleteTweet(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">delete</mat-icon>
+                                        Delete Tweet
+                                      </button>
+                                      <button *ngIf="tweet?.tweetPinned === false" (click)="onPinTweet(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">push_pin</mat-icon>
+                                        Pin to your profile
+                                      </button>
+                                      <button *ngIf="tweet?.tweetPinned === true" (click)="onPinTweet(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">push_pin</mat-icon>
+                                        Unpin to your profile
+                                      </button>
+                                      <button (click)="onAddTweetToList(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">playlist_add</mat-icon>
+                                        Add/remove from Lists
+                                      </button>
+                                    </div>
+                                    <div class="mat_menu" *ngIf="username !== user.username">
+                                      <button (click)="onHideTweet(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">sentiment_very_dissatisfied</mat-icon>
+                                        Not interested in this Tweet
+                                      </button>
+                                      <button *ngIf="tweet?.userFollowed === false" (click)="onFollowUser(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">person_add</mat-icon>
+                                        Follow @{{user?.firstName}}
+                                      </button>
+                                      <button *ngIf="tweet?.userFollowed === true" (click)="onFollowUser(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">person_add</mat-icon>
+                                        Following @{{user?.firstName}}
+                                      </button>
+                                      <button (click)="onAddTweetToList(tweet?.id)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">playlist_add</mat-icon>
+                                        Add/remove from Lists
+                                      </button>
+                                      <button *ngIf="tweet?.userMuted === false" (click)="onMute(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">volume_off</mat-icon>
+                                        Mute @{{user?.firstName}}
+                                      </button>
+                                      <button *ngIf="tweet?.userMuted === true" (click)="onMute(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">volume_off</mat-icon>
+                                        Unmute @{{user?.firstName}}
+                                      </button>
+                                      <button *ngIf="tweet?.userBlocked === false" (click)="onBlock(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">block</mat-icon>
+                                        Block @{{user?.firstName}}
+                                      </button>
+                                      <button *ngIf="tweet?.userBlocked === true" (click)="onBlock(user?.username)" mat-menu-item>
+                                        <mat-icon style="color: #50b7f5;">block</mat-icon>
+                                        Unblock @{{user?.firstName}}
+                                      </button>
+                                    </div>
+                                  </mat-menu>
+                                  <div class="tweet_headerText">
+                                    <a [routerLink]="['/profile', user?.id]">
+                                      <h3> {{user?.firstName}} {{user?.lastName}}
+                                        <span class="tweet_headerSpecial">
+                                          <span class="material-icons post_badge"> verified </span>@{{user?.firstName}}
+                                        </span>
+                                      </h3>
+                                    </a>        
+                                  </div>
+                                  <div [routerLink]="['/comment', tweet?.id]" style="cursor: pointer;" *ngIf="tweet?.tweetBody !== 'null'" class="tweet_headerDescription">
+                                    <p >{{tweet?.tweetBody}}</p>
+                                  </div>
+                                </div>
+                                <div [routerLink]="['/comment', tweet?.id]" style="cursor: pointer;" *ngIf="tweet?.tweetHasImage === true">
+                                  <img [src]="tweet?.tweetImage" alt="">
+                                </div>    
+                                <div [ngClass]="{put_margin: tweet?.tweetHasImage === true }" class="tweet_time">
+                                  {{ tweet?.time }}
+                                </div>
+                                <hr style="margin-top: 5px;">
+                                <div class="tweet_footer">
+                                  <table>
+                                    <tr>
+                                      <td>
+                                        <div *ngIf="tweet?.isUserLiked === true">
+                                          <button (click)="onLikeTweet(tweet?.id)" mat-icon-button color="warn" aria-label="Example icon button with a heart icon">
+                                            <mat-icon>favorite</mat-icon>
+                                          </button>
+                                        </div>
+                                        <div *ngIf="tweet?.isUserLiked === false">
+                                          <button (click)="onLikeTweet(tweet?.id)" mat-icon-button  aria-label="Example icon button with a heart icon">
+                                            <mat-icon style="color: #50b7f5;">favorite</mat-icon>
+                                          </button>
+                                        </div>
+                                      </td>
+                                      <td>{{ tweet?.likes }}</td>
+                                      <td style="padding-left: 15px;">
+                                        <i [routerLink]="['/comment', tweet?.id]"  style="cursor: pointer; font-size: 23px; color: #50b7f5;" class="fa fa-comment"></i></td>
+                                      <td style="padding-left: 8px;">{{ tweet?.numberOfComments }}</td>
+                                      <td>
+                                        <button mat-icon-button [matMenuTriggerFor]="shareMenu">
+                                          <mat-icon style="color: #50b7f5;">ios_share</mat-icon>
+                                        </button>
+                                        <mat-menu #shareMenu="matMenu">
+                                          <div *ngIf="tweet?.tweetBookmarked === false" class="mat_menu">
+                                            <button (click)="onBookmark(tweet?.id)" mat-menu-item>
+                                              <mat-icon style="color: #50b7f5;">bookmark_add</mat-icon>
+                                              Bookmark
+                                            </button>
+                                          </div>
+                                          <div *ngIf="tweet?.tweetBookmarked === true" class="mat_menu">
+                                            <button (click)="onBookmark(tweet?.id)" mat-menu-item>
+                                              <mat-icon style="color: #50b7f5;">bookmark_add</mat-icon>
+                                              Remove Bookmark
+                                            </button>
+                                          </div>
+                                        </mat-menu>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="searchedTweets.length === 0">
+                    <h2 style="text-align: center; margin-top: 20px;">No tweets were found...</h2>
+                 </div>
+            </mat-tab>
+            <mat-tab label="People"> 
+                <div *ngFor="let user of searchedUsers" >
+                    <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+                    <div [routerLink]="['/profile', user?.id]" style="cursor: pointer;" class="post">
+                        <div class="post_avatar">
+                          <img [src]="user?.profilePicture" alt="">
+                        </div>
+                        <div class="post_body">
+                          <div class="post_header">
+                            <div id="profile-marg">
+                                <div id="profile-name">
+                                    <a >{{user?.firstName}} {{user?.lastName}}</a>
+                                </div>
+                                <span>
+                                    <a style="color: gray;">@<span>{{user?.firstName}}</span></a>
+                                </span>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <hr style="width: 637px; margin-bottom: 0px; margin-top: 0px;">
+                </div>
+                <div *ngIf="searchedUsers.length === 0">
+                    <h2 style="text-align: center; margin-top: 20px;">No people were found...</h2>
+                 </div>
+            </mat-tab>
+            <mat-tab label="Photos"> 
+                <div class="postSection" *ngFor="let tweet of searchedTweets">
+                    <div *ngIf="tweet?.tweetHasImage === true">
+                        <div *ngFor="let user of users">
+                          <div *ngIf="tweet?.tweetedBy === user?.username">
+                              <div class="post">
+                                <div class="post_avatar">
+                                  <img [src]="user?.profilePicture" alt="">
+                                </div>
+                              
+                                <div class="post_body">
+                                  <div class="post_header">
+                                    <button style="float: right; font-size: 30px; " mat-button [matMenuTriggerFor]="menu">...</button>
+                                    <mat-menu #menu="matMenu">
+                                      <div class="mat_menu" *ngIf="username === user.username">
+                                        <button (click)="onDeleteTweet(tweet?.id)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">delete</mat-icon>
+                                          Delete Tweet
+                                        </button>
+                                        <button *ngIf="tweet?.tweetPinned === false" (click)="onPinTweet(tweet?.id)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">push_pin</mat-icon>
+                                          Pin to your profile
+                                        </button>
+                                        <button *ngIf="tweet?.tweetPinned === true" (click)="onPinTweet(tweet?.id)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">push_pin</mat-icon>
+                                          Unpin to your profile
+                                        </button>
+                                        <button (click)="onAddTweetToList(tweet?.id)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">playlist_add</mat-icon>
+                                          Add/remove from Lists
+                                        </button>
+                                      </div>
+                                      <div class="mat_menu" *ngIf="username !== user.username">
+                                        <button (click)="onHideTweet(tweet?.id)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">sentiment_very_dissatisfied</mat-icon>
+                                          Not interested in this Tweet
+                                        </button>
+                                        <button *ngIf="tweet?.userFollowed === false" (click)="onFollowUser(user?.username)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">person_add</mat-icon>
+                                          Follow @{{user?.firstName}}
+                                        </button>
+                                        <button *ngIf="tweet?.userFollowed === true" (click)="onFollowUser(user?.username)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">person_add</mat-icon>
+                                          Following @{{user?.firstName}}
+                                        </button>
+                                        <button (click)="onAddTweetToList(tweet?.id)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">playlist_add</mat-icon>
+                                          Add/remove from Lists
+                                        </button>
+                                        <button *ngIf="tweet?.userMuted === false" (click)="onMute(user?.username)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">volume_off</mat-icon>
+                                          Mute @{{user?.firstName}}
+                                        </button>
+                                        <button *ngIf="tweet?.userMuted === true" (click)="onMute(user?.username)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">volume_off</mat-icon>
+                                          Unmute @{{user?.firstName}}
+                                        </button>
+                                        <button *ngIf="tweet?.userBlocked === false" (click)="onBlock(user?.username)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">block</mat-icon>
+                                          Block @{{user?.firstName}}
+                                        </button>
+                                        <button *ngIf="tweet?.userBlocked === true" (click)="onBlock(user?.username)" mat-menu-item>
+                                          <mat-icon style="color: #50b7f5;">block</mat-icon>
+                                          Unblock @{{user?.firstName}}
+                                        </button>
+                                      </div>
+                                    </mat-menu>
+                                    <div class="post_headerText">
+                                      <a [routerLink]="['/profile', user?.id]">
+                                        <h3> {{user?.firstName}} {{user?.lastName}}
+                                          <span class="post_headerSpecial">
+                                            <span class="material-icons post_badge"> verified </span>@{{user?.firstName}}
+                                          </span>
+                                        </h3>
+                                      </a>        
+                                    </div>
+                                    <div [routerLink]="['/comment', tweet?.id]" style="cursor: pointer;" *ngIf="tweet?.tweetBody !== 'null'" class="post_headerDescription">
+                                      <p >{{tweet?.tweetBody}}</p>
+                                    </div>
+                                  </div>
+                                  <div [routerLink]="['/comment', tweet?.id]" style="cursor: pointer;" *ngIf="tweet?.tweetHasImage === true">
+                                    <img [src]="tweet?.tweetImage" alt="">
+                                  </div>    
+                                  <div [ngClass]="{put_margin: tweet?.tweetHasImage === true}" class="post_time">
+                                    {{ tweet?.time }}
+                                  </div>
+                                  <hr>
+                                  <div class="post_footer">
+                                    <table>
+                                      <tr>
+                                        <td>
+                                          <div *ngIf="tweet?.isUserLiked === true">
+                                            <button (click)="onLikeTweet(tweet?.id)" mat-icon-button color="warn" aria-label="Example icon button with a heart icon">
+                                              <mat-icon>favorite</mat-icon>
+                                            </button>
+                                          </div>
+                                          <div *ngIf="tweet?.isUserLiked === false">
+                                            <button (click)="onLikeTweet(tweet?.id)" mat-icon-button  aria-label="Example icon button with a heart icon">
+                                              <mat-icon style="color: #50b7f5;">favorite</mat-icon>
+                                            </button>
+                                          </div>
+                                        </td>
+                                        <td>{{ tweet?.likes }}</td>
+                                        <td style="padding-left: 15px;">
+                                          <i [routerLink]="['/comment', tweet?.id]"  style="cursor: pointer; font-size: 23px; color: #50b7f5;" class="fa fa-comment"></i></td>
+                                        <td style="padding-left: 8px;">{{ tweet?.numberOfComments }}</td>
+                                        <td>
+                                          <button mat-icon-button [matMenuTriggerFor]="shareMenu">
+                                            <mat-icon style="color: #50b7f5;">ios_share</mat-icon>
+                                          </button>
+                                          <mat-menu #shareMenu="matMenu">
+                                            <div *ngIf="tweet?.tweetBookmarked === false" class="mat_menu">
+                                              <button (click)="onBookmark(tweet?.id)" mat-menu-item>
+                                                <mat-icon style="color: #50b7f5;">bookmark_add</mat-icon>
+                                                Bookmark
+                                              </button>
+                                            </div>
+                                            <div *ngIf="tweet?.tweetBookmarked === true" class="mat_menu">
+                                              <button (click)="onBookmark(tweet?.id)" mat-menu-item>
+                                                <mat-icon style="color: #50b7f5;">bookmark_add</mat-icon>
+                                                Remove Bookmark
+                                              </button>
+                                            </div>
+                                          </mat-menu>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="searchedTweets.length === 0">
+                    <h2 style="text-align: center; margin-top: 20px;">No tweets photos were found...</h2>
+                 </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

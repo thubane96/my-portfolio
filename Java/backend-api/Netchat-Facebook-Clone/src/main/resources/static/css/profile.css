@@ -1,0 +1,230 @@
+.navbar-brand{
+  font-family: 'Bebas Neue', cursive;
+}
+.username {
+  font-family: 'Bebas Neue', cursive;
+}
+.nav-search {
+  margin-left: 100px;
+  position: absolute;
+  float: left;
+}
+
+.nav-items-buttons{
+  margin-top: 6px;
+  margin-right: 20px;
+  position: relative;
+  float: left;
+}
+
+.font-type {
+  font-family: 'Bebas Neue', cursive;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.profile-items{
+  font-family: 'Bebas Neue', cursive;
+  font-family: 'Roboto Mono', monospace;
+  margin-bottom: 0px;
+  color: black;
+}
+
+.user_details {
+	width: 250px;
+	float: left;
+	margin-bottom: 5px;
+}
+
+.user_details img {
+	height: 120px;
+	border-radius: 5px;
+	margin-right: 5px;
+}
+
+.user_details_left_right {
+	width: 120px;
+	display: inline-table;
+	position: absolute;
+}
+
+
+
+
+.nav-link {
+  font-size: 20px;
+}
+
+.nav-attr {
+  margin-left: 800px
+}
+
+
+.card-body {
+    text-align: center;
+}
+
+.profile-card {
+    margin: auto;
+}
+
+.avatar {
+    vertical-align: middle;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+h6 {
+    color: white;
+}
+
+.card-footer {
+    margin-top: 20px;
+}
+
+body {
+    overflow: hidden;
+}
+
+.ScrollStyle {
+    max-height: 330px;
+    overflow-y: scroll;
+ }
+
+.ScrollStyle::-webkit-scrollbar{
+    display: none;
+}
+
+.ScrollStylePost {
+    max-height: 490px;
+    overflow-y: scroll;
+ }
+
+.ScrollStylePost::-webkit-scrollbar{
+    display: none;
+}
+
+/* Chat containers */
+.message {
+  background-color: #25D366;
+  border-radius: 5px;
+}
+
+/* Darker chat container */
+.darker {
+  border-color: #ccc;
+  background-color: #EFEFEF;
+}
+
+/* Clear floats */
+.message::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+
+/* Style images */
+.message img {
+  float: left;
+  max-width: 20px;
+  width: 100%;
+  margin-right: 10px;
+  margin-left: 5px;
+  border-radius: 50%;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+img {
+  border-radius: 50%;
+}
+
+/* Style the right image */
+.message img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:5px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+/* Style time text */
+.time-right {
+  float: right;
+  color: black;
+}
+
+/* Style time text */
+.time-left {
+  float: left;
+  color: black;
+}
+
+#pills-newsfeed {
+    display: none;
+}
+
+
+/* The popup chat - hidden by default */
+.form-popup {
+  display: none;
+
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+}
+
+/* Full-width textarea */
+.form-container textarea {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+  resize: none;
+  min-height: 200px;
+}
+
+/* When the textarea gets focus, do something */
+.form-container textarea:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+.NotificationScrollStyle {
+    max-height: 330px;
+    overflow-y: scroll;
+ }
+
+.NotificationScrollStyle::-webkit-scrollbar{
+    display: none;
+}

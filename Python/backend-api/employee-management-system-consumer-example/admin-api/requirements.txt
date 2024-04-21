@@ -1,0 +1,15 @@
+fastapi[all]==0.95.1
+uvicorn[standard]==0.23.1
+loguru==0.7.0
+alembic==1.12.1
+psycopg2-binary==2.9.3
+sqlalchemy==1.4.41
+fastapi-pagination[sqlalchemy]==0.12.4
+requests==2.31.0
+passlib==1.7.4
+python-jose==3.3.0
+redis-om==0.0.20
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-dotenv==0.5.2
+pydantic-factories==1.17.0

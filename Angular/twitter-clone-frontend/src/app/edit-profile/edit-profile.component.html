@@ -1,0 +1,61 @@
+<div class="feed" >
+    <form #editForm="ngForm">
+        <div class="feed_header">
+            <button [routerLink]="['/profile', user?.id]" style="float: left;text-decoration: none;" type="button" class="btn btn-link">Cancel</button>
+            <button (click)="onUpdateUser(editForm.value)" style="float: right; text-decoration: none;" type="button" class="btn btn-link">Save</button>
+            <h2 style="text-align: center;">Profile</h2>
+        </div>
+
+        <div class="profile"> 
+            <div class="wrapper">
+                <a class="profile-bg main-wrapper d-block"></a>
+                <div id="profile-link">
+                    <div class="container">
+                        <img [src]="user?.profilePicture" id="profile-img" class="image">
+                        <div class="overlay">
+                            <div class="icon">
+                                <label for="file-input">
+                                <span style="color: #50b7f5;"  class="material-icons"> add_a_photo </span>
+                                </label>
+                                <!-- (change)="onFileChanged($event)" -->
+                                <input name="profilePicture" (change)="onFileChanged($event)" id="file-input" type="file" ngModel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="updateBox">
+            <input ngModel="{{user?.id}}" name="id" type="hidden">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>First name</mat-label>
+                <input ngModel="{{user?.firstName}}" name="firstName" matInput placeholder="John">
+            </mat-form-field>
+
+            <mat-form-field style="margin-left: 30px;" class="example-full-width" appearance="fill">
+                <mat-label>Last name</mat-label>
+                <input ngModel="{{user?.lastName}}" name="lastName" matInput placeholder="John">
+            </mat-form-field>
+
+            <br>
+
+            <mat-form-field class="example-full-width" appearance="fill" style="width: 430px; height: 60px;">
+                <mat-label>Bio</mat-label>
+                <input ngModel="{{user?.bio}}" matInput name="bio" placeholder="John" value="" style="height: 60px;">
+            </mat-form-field>
+            <br>
+            <br>
+
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Location</mat-label>
+                <input ngModel="{{user?.location}}" name="location" matInput placeholder="John" value="">
+            </mat-form-field>
+
+            <mat-form-field style="margin-left: 30px;" class="example-full-width" appearance="fill">
+                <mat-label>Birth date</mat-label>
+                <input ngModel="{{user?.birthDate}}" name="birthDate" type="date" matInput placeholder="John" value="">
+            </mat-form-field>
+        </div>  
+    </form>
+  
+</div>

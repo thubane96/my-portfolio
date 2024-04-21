@@ -1,0 +1,88 @@
+mat-sidenav-container {
+  --twitter-color: #50b7f5;
+  --twitter-background: #e6ecf0;
+  height: 100%;
+  width: 1230px;
+}
+
+.hideContent{
+  display: none;
+}
+
+mat-sidenav-content {
+  width: 78vw;
+}
+
+.sideContent::-webkit-scrollbar {
+  display: none
+}
+
+     
+     /* Siderbar css */
+  
+  .sidebarOption {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .sidebarOption .material-icons, .fa-twitter {
+    padding: 15px;
+  }
+  
+  .sidebarOption h2 {
+    font-weight: 800;
+    font-size: 15px;
+    margin-right: 20px;
+  }
+  
+  .sidebarOption:hover {
+    background-color: var(--twitter-background);
+    border-radius: 30px;
+    color: var(--twitter-color);
+    transition: color 100ms ease-out;
+  }
+  
+  .sidebarOption.active {
+    color: var(--twitter-color);
+  }
+  
+  .sidebar_tweet {
+    width: 100%;
+    background-color: var(--twitter-color);
+    border: none;
+    color: white;
+    font-weight: 900;
+    border-radius: 30px;
+    height: 50px;
+    margin-top: 10px;
+  }
+  
+  .sidebar {
+    border-radius: 1px solid var(--twitter-background);
+    flex: 0.2;
+    margin-top: 0px;
+    width: 180;
+    padding-left: 110px;
+    padding-right: 20px;
+  }
+
+.sidebar::-webkit-scrollbar {
+  display: none
+}
+  
+.fa-twitter {
+  color: var(--twitter-color);
+  font-size: 30px;
+}
+
+a {
+  text-decoration: none;
+}
+
+mat-sidenav-container {
+  width: 100%;
+}
+
+  
+  

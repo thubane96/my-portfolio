@@ -1,0 +1,157 @@
+body {
+  --twitter-color: #50b7f5;
+  --twitter-background: #e6ecf0;
+}
+  
+  /* Widgets */
+
+  .widgets {
+    flex: 0.3;
+    float: left;
+    width: 40%;
+    //border-left: 6px solid green;
+  }
+  
+  .widgets_input {
+    display: flex;
+    align-items: center;
+    background-color: var(--twitter-background);
+    padding: 10px;
+    border-radius: 20px;
+    margin-top: 10px;
+    margin-left: 20px;
+  }
+  
+  .widgets_input input {
+    border: none;
+    background-color: var(--twitter-background);
+    outline: none;
+  }
+  
+  .widgets_searchIcon {
+    color: gray;
+  }
+  
+  .widgets_widgetContainer {
+    margin-top: 15px;
+    margin-left: 20px;
+    padding: 20px;
+    background-color: #f5f8fa;
+    border-radius: 20px;
+  }
+
+  .widget_search_result {
+    margin-top: 15px;
+    margin-left: 20px;
+    padding: 20px;
+    background-color: #f5f8fa;
+    border-radius: 20px;
+  }
+  
+  .widgets_widgetContainer h2 {
+    font-size: 18px;
+    font-weight: 800;
+  }
+  
+  .post_time {
+    color: gray;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  
+  td {
+    padding-left: 10px;
+  }
+  hr {
+    width: 200px;
+    color: gray;
+    background-color: gray;
+  }
+  
+  mat-card{
+    width: 280px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-bottom: 0px;
+  }
+
+   /* Post */
+
+  .post_avatar img {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+  }
+
+  .likeButton {
+    border: none;
+    background-color: white;
+  }
+
+  .likeButton:hover {
+    background: #1f94dd;
+  }
+ 
+ .post {
+  // margin-left: 20px;
+  // margin-top: 10px;
+   display: flex;
+   align-items: flex-start;
+   border-bottom: 1px solid var(--twitter-background);
+   padding-bottom: 10px;
+ }
+
+ .post_body {
+   width: 200px;
+ }
+ 
+ .post_body img {
+  //  width: 450px;
+  width: 200px;
+   object-fit: contain;
+   border-radius: 20px;
+ }
+ 
+ .post_footer {
+   display: flex;
+   /* justify-content: space-between; */
+   margin-top: 10px;
+ }
+ 
+ .post_badge {
+   font-size: 14px !important;
+   color:  var(--twitter-color);
+   margin-right: 5px;
+ }
+ 
+ .post_headerSpecial {
+   font-weight: 600;
+   font-size: 12px;
+   color: gray;
+ }
+ 
+ .post_headerText h3 {
+   font-size: 15px;
+   margin-bottom: 5px;
+ }
+ 
+ .post_headerDescription {
+   margin-bottom: 10px;
+   font-size: 15px;
+ }
+ 
+ .post_body {
+  //  flex: 1;
+   padding-top: 0px;;
+   //padding: 10px;
+ }
+
+ .mat_menu button {
+  font-size: 12px;
+}
+
+a {
+  text-decoration: none;
+}

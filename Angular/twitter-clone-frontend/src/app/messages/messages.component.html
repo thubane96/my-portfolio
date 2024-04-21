@@ -1,0 +1,76 @@
+<div class="feed">
+    <div class="feed_header">
+        <div style="float: left;" class="post_avatar">
+            <img [src]="user?.profilePicture" alt="">
+        </div>
+        <h2 style="text-align: center;">Messages</h2>
+        <div class="widgets_input">
+            <span style="padding-left: 150px;" class="material-icons widgets_searchIcon"> search </span>
+            <input #text type="text" placeholder="Search for people" [(ngModel)]="filteredText" >
+        </div>
+    </div>
+
+    <div *ngIf="status === false">
+      <h2 style="text-align: center; margin-top: 190px;">Loading...</h2>
+    </div>
+
+    <div *ngIf="status === true">
+      <div style="margin-top: 130px;" *ngIf="text.value.length === 0">
+        <div  *ngFor="let message of user?.messageList">
+          <div *ngFor="let user of users">
+              <div class="postSection" *ngIf="user?.username === message?.friendMessaging"> 
+                  <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+                  <div (click)="onClickMessage(user?.id, user?.username)"  style="cursor: pointer;" class="post">
+                    <div class="post_avatar">
+                      <img [src]="user?.profilePicture" alt="">
+                    </div>
+                    <div class="post_body">
+                      <div class="post_header">
+                        <p *ngIf="message?.numberOfUnopenedMessages > 0" style="float: right; padding-left: 5px; padding-top: 10px;">
+                          <mat-icon [matBadge]="message?.numberOfUnopenedMessages" matBadgeColor="warn"> mail_outlined </mat-icon>
+                        </p>
+                        <p style="float: right; padding-top: 13px;">{{message?.time}}</p>
+                        <div class="post_headerText">
+                          <h3> {{user?.firstName}} {{user?.lastName}}
+                            <span class="post_headerSpecial">
+                              @{{user?.firstName}}
+                            </span>
+                          </h3>        
+                        </div>
+                        <div *ngIf="user?.bio !== 'null'" class="post_headerDescription">
+                          <p >{{message?.lastMessageContent}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="text.value.length > 0">
+      <div style="margin-top: 130px;" *ngFor="let user of users | userFilter:filteredText:'firstName'" >
+          <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+          <div [routerLink]="['/message', user?.id, 'messages']" style="cursor: pointer;" class="post">
+            <div class="post_avatar">
+              <img [src]="user?.profilePicture" alt="">
+            </div>
+            <div class="post_body">
+              <div class="post_headerText">
+                <h3 style="margin-bottom: 0px;"> {{user?.firstName}} {{user?.lastName}}
+                  <span class="post_headerSpecial">
+                    @{{user?.firstName}}
+                  </span>
+                </h3>        
+              </div>
+              <div class="post_headerDescription">
+                <p >Message {{user?.firstName}}</p>
+              </div>
+            </div>
+          </div>
+          <hr style="width: 637px; margin-bottom: 0px; margin-top: 0px;">
+      </div>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+
+.profile-items{
+  font-family: 'Bebas Neue', cursive;
+  font-family: 'Roboto Mono', monospace;
+  margin-bottom: 0px;
+  font-size: 19px;
+}
+
+.font-type {
+  font-family: 'Bebas Neue', cursive;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.nav-items-buttons{
+  margin-top: 6px;
+  margin-right: 20px;
+  position: relative;
+  float: left;
+}
+
+.navbar-brand{
+  font-family: 'Bebas Neue', cursive;
+}
+.username {
+  font-family: 'Bebas Neue', cursive;
+}
+.nav-search {
+  margin-left: 100px;
+  position: absolute;
+  float: left;
+}
+.post-section {
+  width: 600px;
+}
+
+img {
+  border-radius: 50%;
+}
+
+.container {
+  margin-top: 10px;
+}
+
+.user_details {
+	width: 250px;
+	float: left;
+	margin-bottom: 5px;
+}
+
+.user_details img {
+	height: 120px;
+	border-radius: 50%;
+	margin-right: 5px;
+}
+
+.user_details_left_right {
+	width: 120px;
+	display: inline-table;
+	position: absolute;
+}
+
+body {
+    overflow: hidden;
+}
+
+.ScrollStyle {
+    max-height: 435px;
+    overflow-y: scroll;
+ }
+
+.ScrollStyle::-webkit-scrollbar{
+    display: none;
+}
+
+.NotificationScrollStyle {
+    max-height: 330px;
+    overflow-y: scroll;
+ }
+
+.NotificationScrollStyle::-webkit-scrollbar{
+    display: none;
+}

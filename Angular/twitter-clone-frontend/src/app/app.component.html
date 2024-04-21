@@ -1,0 +1,52 @@
+<!-- *ngIf="!isAuthorized" -->
+<mat-sidenav-container *ngIf="isAuthorized">
+  <mat-sidenav class="sidebar" [(opened)]="opened" mode="side">
+    <i class="fa fa-twitter"></i>
+    <div class="sidebarOption active" >
+      <span class="material-icons"> home </span>
+      <a routerLink="/"><h2>Home</h2></a>
+    </div>
+
+    <div class="sidebarOption">
+      <span class="material-icons"> search </span>
+      <a routerLink="/search"><h2>Explore</h2></a>
+    </div>
+
+    <div class="sidebarOption">
+      <span class="material-icons"> notifications_none </span>
+      <a routerLink="/notification"><h2>Notifications</h2></a>
+    </div>
+
+    <div class="sidebarOption">
+      <span class="material-icons"> mail_outline </span>
+      <a routerLink="/messages"><h2>Messages</h2></a>
+    </div>
+
+    <div class="sidebarOption">
+      <span class="material-icons">bookmark_border </span>
+      <a routerLink="/bookmarks"><h2>Bookmarks</h2></a>
+    </div>
+
+    <div class="sidebarOption">
+      <span class="material-icons"> list_alt </span>
+      <h2>Lists</h2>
+    </div>
+
+    <div class="sidebarOption">
+      <span class="material-icons"> perm_identity </span>
+      <a [routerLink]="['/profile', userId]"><h2>Profile</h2></a>
+    </div>
+
+    <div class="sidebarOption">
+      <span class="material-icons"> more_horiz </span>
+      <h2>More</h2>
+    </div>
+    <button (click)="onSignout()" class="sidebar_tweet">Tweet</button>
+  </mat-sidenav>
+  
+  <mat-sidenav-content class="sideContent">
+    <router-outlet></router-outlet>
+    <app-widget></app-widget>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<app-login (atCheckAuth)="onCheckAuth($event)" *ngIf="!isAuthorized"></app-login>

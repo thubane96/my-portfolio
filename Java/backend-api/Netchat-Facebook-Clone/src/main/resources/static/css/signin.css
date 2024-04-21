@@ -1,0 +1,51 @@
+.check {
+  background-color: red;
+}
+.signin-page {
+    height: 625px;
+    width: 100%;
+}
+
+.signin-container{
+    margin: 0 auto;
+    padding: 20px 0;
+    position: relative;
+    width: 980px;
+    // background-color: #a3b5c2;
+}
+
+.signin-form {
+    width: 396px;
+    height: 315px;
+}
+
+.signin-inside-container {
+    margin-top: 100px;
+}
+
+.signin-left-side {
+    box-sizing: border-box;
+    margin-right: 0;
+    padding-right: 32px;
+    width: 580px;
+}
+.card {
+    height: 370px;
+    width: 200px;
+    border-radius: 12px;
+}
+
+h1 {
+    font-size: 100px;
+    font-family: 'Staatliches', cursive;
+    color: #1877f2;
+}
+
+h4 {
+    font-size: 30px;
+    line-height: 1.5;
+}
+
+.singin-left-content {
+    margin-top: 40px;
+}

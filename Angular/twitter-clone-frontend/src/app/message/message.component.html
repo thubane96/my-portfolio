@@ -1,0 +1,67 @@
+<div class="feed">
+    <div class="feed_header">
+        <button style="float: right;" mat-icon-button  aria-label="Example icon button with a heart icon">
+            <mat-icon style="color: #50b7f5;"> info </mat-icon>
+        </button>
+        <i *ngIf="where === 'messages'" routerLink="/messages" style="cursor: pointer; color: #50b7f5; float: left;" class="fa fa-chevron-left"></i>
+        <i *ngIf="where === 'profile'" [routerLink]="['/profile', user?.id]" style="cursor: pointer; color: #50b7f5; float: left;" class="fa fa-chevron-left"></i>
+        <div *ngIf="status === true" style="text-align: center;" class="post_avatar">
+            <img [src]="user?.profilePicture" alt="">
+        </div>
+        <h2 *ngIf="status === true" style="text-align: center;">{{user?.firstName}} {{user?.lastName}}</h2>
+        <h2 *ngIf="status === false" style="text-align: center;">Loading..</h2>
+        
+    </div>
+
+    <div style="margin-top: 130px;">
+
+        <div *ngFor="let messages of currentUser?.messageList">
+              <div *ngIf="messages?.friendMessaging === user?.username">
+                  <div *ngFor="let message of messages?.messagesList">
+                    <div *ngIf="message?.messagedTo === false" style="float: left; margin-left: 10px;" class="container">
+                        <img [src]="currentUser?.profilePicture" alt="Avatar">
+                        <p>{{message?.messageBody}}</p>
+                        <span class="time-right">{{message?.time}}</span>
+                    </div>
+                        
+                    <div *ngIf="message?.messagedTo === true" style="float: right; margin-right: 10px;" class="container darker">
+                        <img [src]="user?.profilePicture" alt="Avatar" class="right">
+                        <p>{{message?.messageBody}}</p>
+                        <span class="time-left">{{message?.time}}</span>
+                    </div> 
+                  </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div class="messaging_box">
+    <hr style="width: 637px; margin-bottom: 5px;margin-top: 0px;">
+    <form #messageData="ngForm" (ngSubmit)="onMessage(messageData, user?.username)">
+        <table style="margin-left: 50px;">
+            <tr>
+                <td>
+                    <div class="image-upload">
+                        <label style="cursor: pointer;" for="file-input">
+                        <span style="color: #50b7f5;" class="material-icons"> perm_media </span>
+                        </label>
+                        <input name="tweetImage" id="file-input" type="file" (change)="onFileChanged($event)">
+                    </div>
+                </td>
+                <td>
+                    <div style="height: 50px;" class="widgets_input">
+                        <input name="messageBody" type="text" placeholder="Start a message" ngModel>
+                    </div>
+                </td>
+                <td>
+                    <button style="cursor: pointer;" mat-icon-button  aria-label="Example icon button with a heart icon">
+                        <mat-icon style="color: #50b7f5;"> send </mat-icon>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <hr style="width: 637px; margin-bottom: 0px;margin-top: 5px;">
+</div>
+

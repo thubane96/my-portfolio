@@ -1,0 +1,89 @@
+<div class="feed">
+  
+  <div *ngIf="status === false">
+    <h2 style="text-align: center; margin-top: 150px;">Loading...</h2>
+  </div>
+
+  <div *ngIf="status === true" class="feed_header">
+    <i [routerLink]="['/profile', user?.id]" style="float: left; cursor: pointer; color: #50b7f5;" class="fa fa-chevron-left"></i>
+    <button routerLink="/search" style="float: right;" mat-icon-button>
+      <mat-icon style="color: #50b7f5;">person_add</mat-icon>
+    </button>
+    <h2 style="text-align: center;">{{ user?.firstName }}</h2>
+  </div>
+
+  <div *ngIf="status === true" style="margin-top: 70px;">
+    <mat-tab-group style="padding-left: 20px; padding-right: 20px;" class="mat_choices">
+      <mat-tab label="Followers"> 
+        <!-- Followers Start -->
+        <div *ngFor="let follower of followersUsernames">
+          <div *ngFor="let user of users">
+            <div class="postSection" *ngIf="user?.username === follower"> 
+              <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+              <div [routerLink]="['/profile', user?.id]" style="cursor: pointer;" class="post">
+                <div class="post_avatar">
+                  <img [src]="user?.profilePicture" alt="">
+                </div>
+                <div class="post_body">
+                  <div class="post_header">
+                    <button *ngIf="user?.userFollowed === true" (click)="onFollowUser(user?.username)" type="button" class="btn rounded-pill followButton">Following</button>
+                    <button *ngIf="user?.userFollowed === false" (click)="onFollowUser(user?.username)" class="btn rounded-pill followButton">Follow</button>
+                    <!-- <button style="float: right; font-size: 30px; " mat-button [matMenuTriggerFor]="menu">...</button> -->
+                    <div class="post_headerText">
+                      <h3> {{user?.firstName}} {{user?.lastName}}
+                        <span class="post_headerSpecial">
+                          @{{user?.firstName}}
+                        </span>
+                      </h3>        
+                    </div>
+                    <div *ngIf="user?.bio !== 'null'" class="post_headerDescription">
+                      <p >{{user?.bio}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+            </div>
+          </div>
+        </div>
+        <!-- Followers End -->
+      </mat-tab>
+
+      <mat-tab></mat-tab>
+
+      <mat-tab label="Following">
+        <!-- Following Starts -->
+        <div *ngFor="let follow of user?.followList">
+          <div *ngFor="let user of users">
+            <div class="postSection" *ngIf="user?.username === follow?.username"> 
+              <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+              <div [routerLink]="['/profile', user?.id]" style="cursor: pointer;" class="post">
+                <div class="post_avatar">
+                  <img [src]="user?.profilePicture" alt="">
+                </div>
+                <div class="post_body">
+                  <div class="post_header">
+                    <button (click)="onFollowUser(user?.username)" type="button" class="btn rounded-pill followButton">Following</button>
+                    <!-- <button style="float: right; font-size: 30px; " mat-button [matMenuTriggerFor]="menu">...</button> -->
+                    <div class="post_headerText">
+                      <h3> {{user?.firstName}} {{user?.lastName}}
+                        <span class="post_headerSpecial">
+                          @{{user?.firstName}}
+                        </span>
+                      </h3>        
+                    </div>
+                    <div *ngIf="user?.bio !== 'null'" class="post_headerDescription">
+                      <p >{{user?.bio}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+            </div>
+          </div>
+        </div>
+        <!-- Following Ends -->
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

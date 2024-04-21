@@ -1,0 +1,57 @@
+<div class="feed">
+
+  <div *ngIf="status === false">
+    <h2 style="text-align: center; margin-top: 150px;">Loading...</h2>
+  </div>
+
+  <div *ngIf="status === true" class="feed_header">
+      <div style="float: left;" class="post_avatar">
+          <img [src]="user?.profilePicture" alt="">
+      </div>
+      <h2 style="text-align: center;">Notifications</h2>
+  </div>
+
+  <div *ngIf="status === true" style="margin-top: 70px;">
+      <mat-tab-group style="padding-left: 20px; padding-right: 20px;" class="mat_choices">
+        <mat-tab label="All"> 
+          <!-- notification Start -->
+          <div *ngFor="let notification of notificationList">
+            <div *ngFor="let user of users">
+              <div class="postSection" *ngIf="user?.username === notification?.notificationFrom"> 
+                <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+                <div (click)="onClickNotification(user?.id, notification)" style="cursor: pointer;" class="post">
+                  <div class="post_avatar">
+                    <img [src]="user?.profilePicture" alt="">
+                  </div>
+                  <div class="post_body">
+                    <div class="post_header">
+                      <div class="post_headerText">
+                        <h3> {{user?.firstName}} {{user?.lastName}}
+                          <span class="post_headerSpecial">
+                            @{{user?.firstName}}
+                          </span>
+                        </h3>        
+                      </div>
+                      <div *ngIf="user?.bio !== 'null'" class="post_headerDescription">
+                        <p >{{notification.content}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr style="width: 637px; margin-bottom: 0px;margin-top: 0px;">
+              </div>
+            </div>
+          </div>
+          <!-- notification End -->
+        </mat-tab>
+  
+        <mat-tab></mat-tab>
+  
+        <mat-tab label="Mentions">
+          <!-- notification Starts -->
+          <h2>under development</h2>
+          <!-- notification Ends -->
+        </mat-tab>
+      </mat-tab-group>
+  </div>
+</div>

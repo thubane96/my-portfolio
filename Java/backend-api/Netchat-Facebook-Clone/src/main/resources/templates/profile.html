@@ -1,0 +1,826 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <script th:src="@{/js/profile.js}"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <script src="https://kit.fontawesome.com/9de78028b3.js" crossorigin="anonymous"></script>
+
+    <title>Netchat</title>
+</head>
+<body style="background-color: #EEEEEE;">
+
+<!-- th:text="${userInfoOfCurrentUser.getFirstName()}" th:href="@{/profile/{userId}(userId=${userInfoOfCurrentUser.getId()})}"  -->
+
+<!-- Navbar section -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/"><span style="font-size: 30px;">Netchat</span></a>
+        <div class="nav-search">
+            <form class="d-flex" th:action="@{/getSearchResults}" method="get">
+                <input class="form-control me-2" name="keywords" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-warning btn-dark" type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="nav-items-buttons">
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a style="color: white;font-size: 18px;"  th:text="${userInfoOfCurrentUser.getFirstName()}" class="nav-link username" th:href="@{/profile/{userId}(userId=${userInfoOfCurrentUser.getId()})}"></a>
+                    </li>
+                    <li class="nav-item" style="margin-right: 5px;">
+                        <a class="btn btn-primary nav-link position-relative" href="/"><i class="fas fa-home"></i></a>
+                    </li>
+                    <li class="nav-item" style="margin-right:20px;">
+                        <button type="button" class="btn btn-primary nav-link position-relative" data-bs-toggle="modal" data-bs-target="#messagesModal">
+                            <i class="far fa-envelope"></i>
+                            <span th:text="${numberOfMessages}" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                  <span class="visually-hidden">unread messages</span>
+                </span>
+                        </button>
+                    </li>
+                    <li class="nav-item" style="margin-right:20px;">
+                        <button type="button" class="btn btn-primary nav-link position-relative" data-bs-toggle="modal" data-bs-target="#friendRequestsModal">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                            <span th:text="${numOfFriendRequests}" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                  <span class="visually-hidden">unread friend requests</span>
+                </span>
+                        </button>
+                    </li>
+                    <li class="nav-item" style="margin-right:20px;">
+                        <button type="button" class="btn btn-primary nav-link position-relative" data-bs-toggle="modal" data-bs-target="#notificationsModal">
+                            <i class="far fa-bell"></i>
+                            <span th:text="${numberOfNotifications}" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                  <span class="visually-hidden">unread notifications</span>
+                </span>
+                        </button>
+                    </li>
+
+                    <li class="nav-item" style="margin-right: 5px;">
+                        <a class="btn btn-primary nav-link position-relative" href="/settings"><i class="fas fa-cog"></i></a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary " aria-current="page" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</nav>
+
+<div style="margin-top: 15px;" class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card ">
+                <div class="card-body">
+                    <table>
+                        <tr>
+                            <td>
+                                <a href="#"><img width=100 th:src="*{'data:image/jpeg;base64,'+{user.getProfilePic()}}" class="float-start" alt=""></a>
+                            </td>
+                            <td style="padding-left: 10px;">
+                                <div>
+                                    <h6 class="profile-items" th:text="|${user.getFirstName()} ${user.getLastName()}|"></h6>
+                                    <h6 class="profile-items" th:text="'Post(s): ' + ${numPosts}"></h6>
+                                    <h6 class="profile-items" th:text="'Like(s): ' + ${numOfLikes}"></h6>
+                                    <h6 class="profile-items" th:text="'Friend(s): ' + ${numOfFriends}"></h6>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="card-footer">
+
+                        <div th:if="${isRequestSentToYou == true}" style="margin-left: 40px;">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <button style="width: 76px;height: 34px;" type="submit" class="btn btn-success" data-bs-dismiss="modal">
+                                            <a style="text-decoration: none;" th:href="@{/profile/acceptFriendRequest/{requestId}(requestId=${friendRequestDetails.getId()})}">Accept</a>
+                                        </button>
+                                    </td>
+
+                                    <td style="padding-left: 10px;">
+                                        <button style="width: 76px;height: 34px;" type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                            <a style="text-decoration: none;" th:href="@{/profile/rejectFriendRequest/{requestId}(requestId=${friendRequestDetails.getId()})}">Reject</a>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+                        <div th:if="${isFriend == true}">
+                            <button type="button" class="btn btn-outline-danger">
+                                <a style="text-decoration: none;color: red;" th:href="@{/removeFriend/{friendId}(friendId=${user.getId()})}">
+                                    Remove Friend
+                                </a>
+                            </button>
+                        </div>
+                        <div th:if="${isFriend == true or user.getUsername() == userInfoOfCurrentUser.getUsername()}">
+                            <button style="margin-top: 5px;" type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                Post something
+                            </button>
+                        </div>
+                        <div th:if="${isFriend == false and user.getUsername() != userInfoOfCurrentUser.getUsername()}">
+                            <div th:if="${isRequestSent == false and isRequestSentToYou == false}">
+                                <button style="margin-top: 5px;" type="button" class="btn btn-warning"><a style="text-decoration: none;" th:href="@{/inviteFriend/{userId}(userId=${user.getId()})}">Invite friend</a></button>
+                            </div>
+                            <div th:if="${isRequestSent == true}">
+                                <button style="margin-top: 5px;" type="button" class="btn btn-danger"><a style="text-decoration: none;" th:href="@{/cancelFriendRequest/{userId}(userId=${user.getId()})}">Cancel request</a></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Post Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="font-type">Got something on your mind?</h5>
+                    </div>
+                    <form class="" th:action="@{/postProfile}" method="post" th:object="${post}" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <input type="hidden" th:value="${user.getId()}" th:name="userProfileId" >
+                            <div style="margin-bottom: 3px;">
+                                <input th:field="*{img}" name="img" type="file">
+                            </div>
+                            <div style="width:450px;" class="input-group">
+                                <textarea th:field="*{postBody}" class="form-control" placeholder="" aria-label="With textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div style="background-color: white; width: 710px; height: 560px;"  class="profile_main_column column">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-messages-tab" data-toggle="pill" href="#pills-messages" role="tab" aria-controls="pills-messages" aria-selected="false" onclick="myFunction2()">Messages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-newsfeed-tab" data-toggle="pill" href="#pills-newsfeed" role="tab" aria-controls="pills-newsfeed" aria-selected="true" onclick="myFunction()">Newsfeed</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+
+<!--                    Newsfeed Tab-->
+                    <div style="margin-left: 10px;" class="tab-pane fade ScrollStylePost" id="pills-newsfeed" role="tabpanel" aria-labelledby="pills-newsfeed-tab">
+                        <div style="width: 590px;margin-top: 5px;" class="" id="accordion">
+                            <div th:if="${posts.empty}">
+                                <div style="text-align: center;" id="">
+                                    <p style="font-size: 20px;">no posts to display!</p>
+                                </div>
+                            </div>
+                            <div th:if="${!posts.empty}">
+
+                                <tbody>
+                                <tr th:each="post: ${posts}">
+
+<!--                                    th:onclick="|window.location.href='/viewPost/${post.getId()}'|"-->
+                                    <div style="width:690px;cursor:pointer;" class="card"  >
+                                        <div class="card-body" id="headingOne">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-sm-1">
+                                                        <div th:if="${!ListOfUsers.empty}">
+                                                            <div th:each="postUser: ${ListOfUsers}">
+                                                                <div th:if="${postUser.getUsername() == post.getAddedBy()}">
+                                                                    <a href="">  <img width=35 th:src="*{'data:image/jpeg;base64,'+{postUser.getProfilePic()}}"> </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-11">
+                                                        <div th:if="${post.getAddedBy() == userInfoOfCurrentUser.getUsername() or post.getUserTo() == userInfoOfCurrentUser.getUsername()}">
+                                                            <!-- Button trigger modal -->
+                                                            <button style="float: right;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
+                                                                X
+                                                            </button>
+
+                                                            <!-- Modal -->
+                                                            <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop2Label" aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-centered">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-body">
+                                                                            Are you sure you want to delete this post?
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancel</button>
+                                                                            <button type="button" class="btn btn-danger"><a style="text-decoration: none;" th:href="@{/deletePostProfile/{postId}(postId=${post.getId()})}">Delete</a> </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    <div th:if="${!ListOfUsers.empty}">
+                                                                        <div th:each="postUser: ${ListOfUsers}">
+                                                                            <div th:if="${postUser.getUsername() == post.getAddedBy()}">
+
+                                                                                <p class="font-type"><a style="text-decoration: none; font-size:13px, color: blue;" th:text="|${postUser.getFirstName()} ${postUser.getLastName()}|" th:href="@{/profile/{userId}(userId=${postUser.getId()})}"></a></p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <div th:if="${post.getUserTo() != null}">
+                                                                    <div th:if="${!ListOfUsers.empty}">
+                                                                        <div th:each="postUser: ${ListOfUsers}">
+                                                                            <div th:if="${post.getUserTo() == postUser.getUsername()}">
+                                                                                <td>
+                                                                                    <div style="margin-left: 5px;">
+                                                                                        <p class="font-type">to <a style="text-decoration: none;" th:text="| ${postUser.getFirstName()} ${postUser.getLastName()} |" th:href="@{/profile/{userId}(userId=${postUser.getId()})}"></a></p>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                                <td >
+                                                                    <p class="font-type" th:text="${post.getTime()}" style="font-size:13px; margin-left: 3px;"> </p>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    <p class="font-type" th:text="${post.getBody()}"></p>
+                                                                    <div th:if="${post.getImg() != null and !post.getImg().empty}">
+                                                                        <img class="rounded" style="height:200px; width:200px;border-radius: 0;" th:src="*{'data:image/jpeg;base64,'+{post.getImg()}}"  alt="">
+                                                                    </div>
+                                                                    <!--                                                                    th:if="${post.getImg() != null}"-->
+                                                                    <div th:if="${post.getVideoUrl() != null}">
+                                                                        <iframe width="200" height="200" th:src="${post.getVideoUrl()}"></iframe>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    <button type="button" th:text="'Comments(' + ${post.getNumberOfComments()} + ')'"  style="text-decoration: none;" class="btn btn-link" data-bs-toggle="collapse" th:data-bs-target="'#collapseCommentSection' + ${post.getId()}" aria-expanded="false" th:aria-controls="'collapseCommentSection' + ${post.getId()}">
+
+                                                                    </button>
+
+                                                                <td style="padding-left: 40px;">
+                                                                    <div th:if="${post.getUserLiked() == true}">
+                                                                        <a style="text-decoration: none;" th:href="@{/likeInProfile/{postId}(postId=${post.getId()})}">Unlike</a>
+                                                                    </div>
+                                                                    <div th:if="${post.getUserLiked() == false}">
+                                                                        <a style="text-decoration: none;" th:href="@{/likeInProfile/{postId}(postId=${post.getId()})}">Like</a>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div th:if="${post.getLikes() < 2}">
+                                                                        <p class="font-type" style="padding-left: 5px;margin-top: 15px;" th:text="${post.getLikes()} +' Like'" > </p>
+                                                                    </div>
+                                                                    <div th:if="${post.getLikes() >= 2}">
+                                                                        <p class="font-type" style="padding-left: 5px;margin-top: 15x; margin-bottom: 0px;" th:text="${post.getLikes()} +' Likes'" > </p>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="collapse" th:id="'collapseCommentSection' + ${post.getId()}">
+                                            <div class="card-footer">
+                                                <div >
+                                                    <form th:action="@{/commentProfile}" method="post" th:object="${comment}">
+                                                        <input type="hidden" th:value="${post.getId()}" th:name="idReceived" >
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    <div style="width:570px;" class="input-group">
+                                                                        <textarea th:field="*{commentBody}" class="form-control" aria-label="With textarea"></textarea>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <button style="margin-left: 20px; " type="submit" class="btn btn-primary">Post</button>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </form>
+                                                </div>
+
+                                                <!-- comment section -->
+                                                <div th:if="${!post.getComments().empty}">
+                                                    <div th:each="comment: ${post.getComments()}">
+                                                            <div th:if="${!ListOfUsers.empty}">
+                                                                <div th:each="commentedUser: ${ListOfUsers}">
+                                                                    <div th:if="${commentedUser.getUsername() == comment.getCommentedBy()}">
+                                                                        <div style="margin-bottom: 15px;" class="container ScrollStyle">
+                                                                            <div style="margin-top: 10px;" class="row">
+                                                                                <div class="col-sm-1">
+                                                                                    <a href="" > <img width="30" th:src="*{'data:image/jpeg;base64,'+{commentedUser.getProfilePic()}}"> </a>
+                                                                                </div>
+                                                                                <div class="col-sm-11">
+                                                                                    <div th:if="${comment.getCommentedBy() == user.getUsername()}">
+                                                                                        <!-- Button trigger modal -->
+                                                                                        <button style="float: right; color: red;" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#staticBackdropComment">
+                                                                                            X
+                                                                                        </button>
+
+                                                                                        <!-- Modal -->
+                                                                                        <div class="modal fade" id="staticBackdropComment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                                                            <div class="modal-dialog modal-dialog-centered">
+                                                                                                <div class="modal-content">
+                                                                                                    <div class="modal-body">
+                                                                                                        Are you sure you want to delete your comment?
+                                                                                                    </div>
+                                                                                                    <div class="modal-footer">
+                                                                                                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancel</button>
+
+                                                                                                        <button type="button" class="btn btn-danger"><a style="text-decoration: none;" th:href="@{/deleteCommentInProfile/{commentId}(commentId=${comment.getId()})}">Delete</a> </button>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <p class="font-type"><a style="text-decoration: none;font-size: 13px; color: blue;" th:text="|${commentedUser.getFirstName()} ${commentedUser.getLastName()}|" th:href="@{/profile/{userId}(userId=${commentedUser.getId()})}"></a></p>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <p class="font-type" th:text="${comment.getTime()}" style="font-size:13px; margin-left: 3px;"></p>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <p class="font-type" th:text="${comment.getCommentBody()}"></p>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+
+                                                                                </div>
+                                                                                <div class="col-sm-12">
+                                                                                    <table>
+                                                                                        <tr>
+                                                                                            <td style="padding-left: 40px;">
+                                                                                                <div th:if="${comment.getUserLiked() == true}">
+                                                                                                    <a class="font-type" style="text-decoration: none;" th:href="@{/likeCommentInProfile/{commentId}(commentId=${comment.getId()})}">Unlike</a>
+                                                                                                </div>
+                                                                                                <div th:if="${comment.getUserLiked() == false}">
+                                                                                                    <a class="font-type" style="text-decoration: none;" th:href="@{/likeCommentInProfile/{commentId}(commentId=${comment.getId()})}">Like</a>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <div th:if="${comment.getNumOfLikes() < 2}">
+                                                                                                    <p class="font-type" style="padding-left: 5px;margin-top: 15px;" th:text="${comment.getNumOfLikes()} +' Like'" > </p>
+                                                                                                </div>
+                                                                                                <div th:if="${comment.getNumOfLikes() >= 2}">
+                                                                                                    <p class="font-type" style="padding-left: 5px;margin-top: 15x;margin-bottom: 0px;" th:text="${comment.getNumOfLikes()} +' Likes'" > </p>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </tr>
+                                </tbody>
+
+                            </div>
+                            <div style="margin-top: 20px;" class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading posts...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+<!--                    Messages Tab-->
+
+                        <div class="tab-pane fade show active" id="pills-messages" role="tabpanel" aria-labelledby="pills-messages-tab">
+                            <div style="margin-left: 10px; margin-right: 10px; height: 500px;" class="card">
+                                <div style="text-align: center;" th:if="${isFriend == false and isYourProfile == false}">
+                                    <p style="font-size: 20px;">You can't message this user, you two are not friends yet!</p>
+                                </div>
+                                <div th:if="${isFriend == true}">
+                                    <div th:if="${!isYourProfile}">
+                                        <div style="background-color: white;" class="card-header">
+                                            <p th:text="'You and '+ ${user.getFirstName()} +' '+ ${user.getLastName()}"></p>
+                                        </div>
+                                        <div style="padding-bottom: 0px;" class="card-body">
+                                            <div style="height: 335px;">
+                                                <div style="padding-left: 5px; padding-right: 5px;" class="ScrollStyle">
+                                                    <div th:if="${!messages.empty}">
+                                                            <div th:each="message: ${messages}">
+
+                <!--                                                    Message To Section-->
+                                                                    <div th:if="${message.getUserFrom() == userInfoOfCurrentUser.getUsername()}">
+                                                                        <div class="card" style="width: 50%;margin-bottom: 5px;margin-top: 5px;">
+                                                                            <div class="message">
+                                                                                <img th:src="*{'data:image/jpeg;base64,'+{userInfoOfCurrentUser.getProfilePic()}}" alt="Avatar">
+                                                                                <div style="text-align: left;">
+                                                                                    <p style="font-size: 12px; margin-bottom: 0px;" th:text="${message.getBody()}"></p>
+                                                                                </div>
+                                                                                <div class="">
+                                                                                    <span style="margin-right: 5px;margin-bottom: 5px; font-size: 12px;" class="time-right" th:text="${message.getTimeMessaged()}"></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                <!--                                                    Message From Section-->
+                                                                    <div th:if="${message.getUserFrom() == user.getUsername()}">
+                                                                        <div class="card" style="width: 50%; margin-left: 325px;margin-bottom: 5px;margin-top: 5px;">
+                                                                            <div class="message darker">
+                                                                                <img th:src="*{'data:image/jpeg;base64,'+{user.getProfilePic()}}" alt="Avatar" class="right">
+                                                                                <div style="margin-left: 5px; text-align: right;" class="">
+                                                                                    <p style="font-size: 12px; margin-bottom: 0px;" th:text="${message.getBody}"></p>
+                                                                                </div>
+                                                                                <div class="">
+                                                                                    <span style="margin-left: 5px;margin-bottom: 5px; font-size: 12px;" class="time-left" th:text="${message.getTimeMessaged()}"></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div style="background-color: white; margin-top: 0px;" class="card-footer">
+                                            <div th:if="${isFriend == true}">
+                                                <form th:action="@{/sendMessage}" method="post" th:object="${message}">
+                                                    <input type="hidden" th:value="${user.getId()}" th:name="userToId">
+                                                    <input type="hidden" th:value="${user.getUsername()}" th:name="userTo">
+                                                    <input type="hidden" th:value="${userInfoOfCurrentUser.getUsername()}" th:name="userFrom">
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <div style="width: 550px;" class="input-group">
+                                                                    <textarea th:field="*{body}" class="form-control" aria-label="With textarea" placeholder="Write your message"></textarea>
+                                                                </div>
+                                                            </td>
+                                                            <td style="padding-left: 10px;">
+                                                                <button type="submit" class="btn btn-primary">Send</button>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+<!--                                if you are in your own profile-->
+                                <div th:if="${isYourProfile}">
+                                    <div style="background-color: white;" class="card-header">
+                                        <p>Your messages</p>
+                                    </div>
+                                    <div style="padding-bottom: 0px;" class="card-body">
+                                        <div style="height: 335px;">
+                                            <div style="padding-left: 5px; padding-right: 5px;" class="ScrollStyle">
+                                                <div th:if="${!listOfFriends.empty}">
+                                                    <div th:if="${!ListOfUsers.empty}">
+                                                        <div th:each="friend: ${listOfFriends}">
+                                                            <div th:each="users: ${ListOfUsers}">
+                                                                <div th:if="${friend.getFriendUsername() == users.getUsername()}">
+                                                                    <div style="width: 600px;" class="btn" role="button" data-bs-toggle="modal" data-bs-target="#messageModal">
+                                                                        <div style="height: 62.22222px;width: 352.22222px;" class="card">
+                                                                                <div class="card-body">
+                                                                                    <div>
+                                                                                        <table>
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    <img width=35 th:src="*{'data:image/jpeg;base64,'+{users.getProfilePic()}}" class="float-start" alt="">
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <p th:text="'Click to chat with '+ ${users.getFirstName()} +' '+ ${users.getLastName()}"></p>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </div>
+                                                                                </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!--message modal -->
+                                                                    <div class="modal fade" id="messageModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h5 class="modal-title" id="messageModalLabel" th:text="'You and '+ ${users.getFirstName()}+' '+${users.getLastName()}"></h5>
+                                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                </div>
+                                                                                <div style="padding-bottom: 0px;" class="modal-body">
+                                                                                        <div style="height: 335px;">
+                                                                                            <div style="padding-left: 5px; padding-right: 5px;" class="ScrollStyle">
+                                                                                                <div th:if="${!allMessages.empty}">
+                                                                                                    <div th:each="message: ${allMessages}">
+
+                                                                                                        <!--                                                    Message To Section-->
+                                                                                                        <div th:if="${message.getUserFrom() == userInfoOfCurrentUser.getUsername() and message.getUserTo() == users.getUsername()}">
+                                                                                                            <div class="card" style="width: 50%;margin-bottom: 5px;margin-top: 5px;">
+                                                                                                                <div class="message">
+                                                                                                                    <img th:src="*{'data:image/jpeg;base64,'+{userInfoOfCurrentUser.getProfilePic()}}" alt="Avatar">
+                                                                                                                    <div style="text-align: left;">
+                                                                                                                        <p style="font-size: 12px; margin-bottom: 0px;" th:text="${message.getBody()}"></p>
+                                                                                                                    </div>
+                                                                                                                    <div class="">
+                                                                                                                        <span style="margin-right: 5px;margin-bottom: 5px; font-size: 12px;" class="time-right" th:text="${message.getTime()}"></span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <!--                                                    Message From Section-->
+                                                                                                        <div th:if="${message.getUserFrom() == users.getUsername() and userInfoOfCurrentUser.getUsername() == message.getUserTo()}">
+                                                                                                            <div class="card" style="width: 50%;margin-left: 230px;margin-bottom: 5px;margin-top: 5px;">
+                                                                                                                <div class="message darker">
+                                                                                                                    <img th:src="*{'data:image/jpeg;base64,'+{users.getProfilePic()}}" alt="Avatar" class="right">
+                                                                                                                    <div style="margin-left: 5px; text-align: right;" class="">
+                                                                                                                        <p style="font-size: 12px; margin-bottom: 0px;" th:text="${message.getBody}"></p>
+                                                                                                                    </div>
+                                                                                                                    <div class="">
+                                                                                                                        <span style="margin-left: 5px;margin-bottom: 5px; font-size: 12px;" class="time-left" th:text="${message.getTime()}"></span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+
+
+                                                                                </div>
+                                                                                <div style="background-color: white; margin-top: 0px;" class="modal-footer">
+                                                                                    <form th:action="@{/sendMessage}" method="post" th:object="${message}">
+                                                                                        <input type="hidden" th:value="${users.getId()}" th:name="userToId">
+                                                                                        <input type="hidden" th:value="${users.getUsername()}" th:name="userTo">
+                                                                                        <input type="hidden" th:value="${userInfoOfCurrentUser.getUsername()}" th:name="userFrom">
+                                                                                        <table>
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    <div style="width: 400px;" class="input-group">
+                                                                                                        <textarea th:field="*{body}" class="form-control" aria-label="With textarea" placeholder="Write your message"></textarea>
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td style="padding-left: 10px;">
+                                                                                                    <button type="submit" class="btn btn-primary">Send</button>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+<!--                            put here    -->
+                    </div>
+<!--                    End of message Tab-->
+            </div>
+        </div>
+
+            <div >
+                <!--        Navbar links modals-->
+                <!-- Friend request Modal -->
+                <div style="margin-left: 500px;margin-top: 50px;" class="modal fade" id="friendRequestsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                Friend requests
+                                <h6 class="modal-title" id="exampleModalLabel">Friend requests</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body NotificationScrollStyle">
+                                <div th:if="${!listOfFriendRequests.empty}">
+                                    <div th:if="${!ListOfUsers.empty}">
+                                        <div th:each="friendRequest: ${listOfFriendRequests}">
+                                            <div th:each="userFrom: ${ListOfUsers}">
+                                                <div th:if="${userFrom.getUsername() == friendRequest.getUserFrom()}">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <a href="#"><img width=35 th:src="*{'data:image/jpeg;base64,'+{userFrom.getProfilePic()}}" class="rounded float-start" alt=""></a>
+                                                                    </td>
+                                                                    <td style="padding-left: 5px;">
+                                                                        <p style="font-size: 11px;" th:text="${userFrom.getFirstName()}+' '+${userFrom.getLastName()}+' sent you a friend request'"></p>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table style="padding-left: 0px;margin-left: 40px;margin-top: 8px;">
+                                                                <tr>
+                                                                    <td>
+                                                                        <button style="width: 76px;height: 34px;" type="submit" class="btn btn-success" data-bs-dismiss="modal">
+                                                                            <a style="text-decoration: none;" th:href="@{/profile/acceptFriendRequest/{requestId}(requestId=${friendRequest.getId()})}">Accept</a>
+                                                                        </button>
+                                                                    </td>
+
+                                                                    <td style="padding-left: 10px;">
+                                                                        <button style="width: 76px;height: 34px;" type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                                                            <a style="text-decoration: none;" th:href="@{/profile/rejectFriendRequest/{requestId}(requestId=${friendRequest.getId()})}">Reject</a>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message Modal -->
+                <div style="margin-left: 500px;margin-top: 50px;" class="modal fade" id="messagesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div style="height: 400px;" class="modal-content">
+                            <div class="modal-header">
+                                Messages
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body NotificationScrollStyle">
+                                <div class="NotificationScrollStyle">
+                                    <div th:if="${!allMessages.empty}">
+                                        <div th:each="message: ${allMessages}" >
+                                            <div th:if="${message.getOpened() == 'no'}">
+                                                <div th:if="${userInfoOfCurrentUser.getUsername() == message.getUserTo()}">
+                                                    <div style="height: 82.22222px;margin-bottom: 5px;margin-top: 5px;cursor:pointer" class="card" th:onclick="|window.location.href='/viewMessage/${message.getId()}'|">
+                                                        <div class="card-body">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div th:if="${!ListOfUsers.empty}">
+                                                                            <div th:each="userInfo: ${ListOfUsers}">
+                                                                                <div th:if="${message.getUserFrom() == userInfo.getUsername()}">
+                                                                                    <a href="#"><img width=35 th:src="*{'data:image/jpeg;base64,'+{userInfo.getProfilePic()}}" class="rounded float-start" alt=""></a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td style="padding-left: 5px;">
+                                                                       <p style="font-size: 11px;" th:text="${message.getTime()}"></p>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <div class="">
+                                                                <p class="font-type" style="font-size: 13px;" th:text="'They said: '+${message.getBody()}"></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Modal -->
+                <div style="margin-left: 500px;margin-top: 50px;" class="modal fade" id="notificationsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div style="height: 402.22222px;" class="modal-content">
+                            <div class="modal-header">
+                                Notifications
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body NotificationScrollStyle">
+                                <div class="NotificationScrollStyle">
+                                    <div th:if="${!notifications.empty}">
+                                        <div th:if="${!ListOfUsers.empty}">
+                                            <div th:each="notification: ${notifications}">
+                                                <div th:if="${userInfoOfCurrentUser.getUsername() == notification.getUserTo()}">
+                                                    <div th:each="userInfo: ${ListOfUsers}">
+                                                        <div th:if="${notification.getUserFrom() == userInfo.getUsername()}">
+                                                            <div th:if="${notification.getOpened() == 'no'}">
+                                                                <div style="cursor:pointer;height: 82.22222px;margin-bottom: 2px;" class="card" th:onclick="|window.location.href='/viewPost/${notification.getPostId()}/${notification.getId()}'|">
+                                                                    <div class="card-body">
+                                                                        <table>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <a href="#"><img width=35 th:src="*{'data:image/jpeg;base64,'+{userInfo.getProfilePic()}}" class="rounded float-start" alt=""></a>
+                                                                                </td>
+                                                                                <td style="padding-left: 5px;">
+                                                                                   <p style="font-size: 11px;" th:text="${notification.getTime()}"></p>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                        <div class="">
+                                                                            <p class="font-type" style="font-size: 11px;" th:text="${notification.getMessage()}"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+    </div>
+</div>
+
+    <footer class="footer fixed-bottom bg-primary">
+        <div class="container">
+            <div class="d-flex justify-content-center">
+                <p style="font-family: 'Bebas Neue', cursive; font-size: 20px;margin-bottom: 5px;margin-top: 5px; color: white;">
+                    @Icode by The Object Oriented Gladiator
+                </p>
+            </div>
+        </div>
+    </footer>
+<!-- Optional JavaScript; choose one of the two! -->
+
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!-- Option 2: Separate Popper and Bootstrap JS -->
+<!--
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
+-->
+</body>
+</html>

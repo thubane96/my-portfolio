@@ -1,0 +1,235 @@
+<!-- feed starts -->
+<div class="feed">
+    <div class="feed_header">
+      <i [routerLink]="['/comment', tweetId]" style="cursor: pointer; color: #50b7f5; float: left;" class="fa fa-chevron-left"></i>
+       <h2 style="text-align: center;">Tweet</h2>
+    </div>
+
+    <div *ngIf="status === false">
+      <h2 style="text-align: center; margin-top: 150px;">Loading...</h2>
+    </div>
+
+    <div *ngIf="status === true" class="post_section">
+      <!-- Post starts -->
+      <div *ngIf="showComment">
+        <div *ngFor="let user of users">
+          <div *ngIf="comment?.commentedBy === user?.username">
+            <div class="post">
+              <div class="post_avatar">
+                <img [src]="user.profilePicture" alt="">
+              </div>
+        
+              <div class="post_body">
+                <div class="post_header">
+                  <button style="float: right; font-size: 30px; " mat-button [matMenuTriggerFor]="menu">...</button>
+                  <mat-menu #menu="matMenu">
+                    <div class="mat_menu" *ngIf="username === user.username">
+                      <button (click)="onDeleteComment(comment?.id)" mat-menu-item>
+                        <mat-icon style="color: #324e5f;">delete</mat-icon>
+                        Delete Comment
+                      </button>
+                    </div>
+                    <div class="mat_menu" *ngIf="username !== user.username">
+                      <button *ngIf="comment?.userFollowed === false" (click)="onFollowUser(user?.username)" mat-menu-item>
+                        <mat-icon style="color: #50b7f5;">person_add</mat-icon>
+                        Follow @{{user?.firstName}}
+                      </button>
+                      <button *ngIf="comment?.userFollowed === true" (click)="onFollowUser(user?.username)" mat-menu-item>
+                        <mat-icon style="color: #50b7f5;">person_add</mat-icon>
+                        Following @{{user?.firstName}}
+                      </button>
+                      <button *ngIf="comment?.userMuted === false" (click)="onMute(user?.username)" mat-menu-item>
+                        <mat-icon style="color: #50b7f5;">volume_off</mat-icon>
+                        Mute @{{user?.firstName}}
+                      </button>
+                      <button *ngIf="comment?.userMuted === true" (click)="onMute(user?.username)" mat-menu-item>
+                        <mat-icon style="color: #50b7f5;">volume_off</mat-icon>
+                        Unmute @{{user?.firstName}}
+                      </button>
+                      <button *ngIf="comment?.userBlocked === false" (click)="onBlock(user?.username)" mat-menu-item>
+                        <mat-icon style="color: #50b7f5;">block</mat-icon>
+                        Block @{{user?.firstName}}
+                      </button>
+                      <button *ngIf="comment?.userBlocked === true" (click)="onBlock(user?.username)" mat-menu-item>
+                        <mat-icon style="color: #50b7f5;">block</mat-icon>
+                        Unblock @{{user?.firstName}}
+                      </button>
+                    </div>
+                  </mat-menu>
+                  <div class="post_headerText">
+                    <a [routerLink]="['/profile', user?.id]">
+                      <h3> {{user?.firstName}} {{user?.lastName}}
+                        <span class="post_headerSpecial">
+                          <span class="material-icons post_badge"> verified </span>@{{user?.firstName}}
+                        </span>
+                      </h3>
+                    </a>
+                  </div>
+                  <div *ngIf="comment?.commentBody !== 'null'" class="post_headerDescription">
+                    <p >{{ comment?.commentBody }}</p>
+                  </div>
+                </div>
+                <div *ngIf="comment?.commentImage !== undefined">
+                  <img [src]="comment?.commentImage" alt="">
+                </div>  
+              
+                <div class="post_time">
+                  {{ comment?.time }}
+                </div>
+                <hr>
+                <div class="post_footer">
+                  <table>
+                    <tr>
+                      <td>
+                        <div *ngIf="comment?.isUserLiked === true">
+                          <button (click)="onLikeComment(comment?.id)" mat-icon-button color="warn" aria-label="Example icon button with a heart icon">
+                            <mat-icon>favorite</mat-icon>
+                          </button>
+                        </div>
+                        <div *ngIf="comment?.isUserLiked === false">
+                          <button (click)="onLikeComment(comment?.id)" mat-icon-button  aria-label="Example icon button with a heart icon">
+                            <mat-icon style="color: #50b7f5;">favorite</mat-icon>
+                          </button>
+                        </div>
+                      </td>
+                      <td>{{ comment?.commentLikes }}</td>
+                      <td>
+                        <i style="color: #50b7f5; font-size: 23px;" class="fa fa-comment"></i>
+                      </td>
+                      <td>{{ comment?.numberOfCommentReplies }}</td>
+                      <td><span style="color: #50b7f5;" class="material-icons"> ios_share </span></td>
+                      <td>Share this Tweet</td>
+                    </tr>
+                  </table>
+                </div>
+                <hr>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Reply box -->
+      <div *ngIf="showComment">
+        <div class="tweetBox">
+          <form #replyData="ngForm" (ngSubmit)="onAddCommentReply(replyData)">
+            <div class="tweetbox_input">
+              <div *ngIf="users">
+                <div *ngFor="let user of users">
+                  <div *ngIf="username === user?.username">
+                    <img [src]="user.profilePicture" alt="">
+                  </div>
+                </div>
+              </div>
+              <input type="text" name="commentReplyBody" placeholder="Tweet your reply" ngModel>
+              <input type="hidden" name="commentId" ngModel="{{comment?.id}}">
+            </div>
+            <div class="image-upload">
+            <label style="cursor: pointer;" for="file-input">
+              <span class="material-icons"> perm_media </span>
+    
+            </label>
+            <input id="file-input" type="file" (change)="onFileChanged($event)">
+          </div>
+            <button type="submit" class="tweetBox_tweetButton">Reply</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Replies -->
+      <div *ngIf="showComment">
+        <div *ngFor="let commentReply of comment.commentReplyList">
+          <div  *ngFor="let user of users">
+            <div *ngIf="commentReply?.commentRepliedBy === user?.username">
+              <div class="post">
+                <div class="post_avatar">
+                  <img [src]="user?.profilePicture" alt="">
+                </div>
+          
+                <div class="post_body">
+                  <div class="post_header">
+                    <button style="float: right; font-size: 30px; " mat-button [matMenuTriggerFor]="menu">...</button>
+                    <mat-menu #menu="matMenu">
+                      <div class="mat_menu" *ngIf="username === user.username">
+                        <button (click)="onDeleteCommentReply(commentReply?.id)" mat-menu-item>
+                          <mat-icon style="color: #324e5f;">delete</mat-icon>
+                          Delete Comment
+                        </button>
+                      </div>
+                      <div class="mat_menu" *ngIf="username !== user.username">
+                        <button *ngIf="commentReply?.userFollowed === false" (click)="onFollowUser(user?.username)" mat-menu-item>
+                          <mat-icon style="color: #50b7f5;">person_add</mat-icon>
+                          Follow @{{user?.firstName}}
+                        </button>
+                        <button *ngIf="commentReply?.userFollowed === true" (click)="onFollowUser(user?.username)" mat-menu-item>
+                          <mat-icon style="color: #50b7f5;">person_add</mat-icon>
+                          Following @{{user?.firstName}}
+                        </button>
+                        <button *ngIf="commentReply?.userMuted === false" (click)="onMute(user?.username)" mat-menu-item>
+                          <mat-icon style="color: #50b7f5;">volume_off</mat-icon>
+                          Mute @{{user?.firstName}}
+                        </button>
+                        <button *ngIf="commentReply?.userMuted === true" (click)="onMute(user?.username)" mat-menu-item>
+                          <mat-icon style="color: #50b7f5;">volume_off</mat-icon>
+                          Unmute @{{user?.firstName}}
+                        </button>
+                        <button *ngIf="commentReply?.userBlocked === false" (click)="onBlock(user?.username)" mat-menu-item>
+                          <mat-icon style="color: #50b7f5;">block</mat-icon>
+                          Block @{{user?.firstName}}
+                        </button>
+                        <button *ngIf="commentReply?.userBlocked === true" (click)="onBlock(user?.username)" mat-menu-item>
+                          <mat-icon style="color: #50b7f5;">block</mat-icon>
+                          Unblock @{{user?.firstName}}
+                        </button>
+                      </div>
+                    </mat-menu>
+                    <div class="post_headerText">
+                      <h3> <a [routerLink]="['/profile', user?.id]">{{user?.firstName}} {{user?.lastName}}</a>
+                        <span class="post_headerSpecial">
+                          <span class="material-icons post_badge"> verified </span>@{{user?.firstName}}
+                        </span>
+                        ' {{ commentReply?.time }}
+                      </h3>
+                    </div>
+                    <div class="post_headerDescription">
+                      <p *ngIf="commentReply?.commentReplyBody !== 'null'">{{ commentReply?.commentReplyBody }}</p>
+                    </div>
+                  </div>
+                  <div *ngIf="commentReply?.commentReplyImage !== undefined">
+                    <img [src]="commentReply?.commentReplyImage" alt="">
+                  </div>  
+                  
+                  <div class="post_footer">
+                    <table>
+                      <tr>
+                        <td>
+                          <div *ngIf="commentReply?.isUserLiked === true">
+                            <button (click)="onLikeCommentReply(commentReply?.id)" mat-icon-button color="warn" aria-label="Example icon button with a heart icon">
+                              <mat-icon>favorite</mat-icon>
+                            </button>
+                          </div>
+                          <div *ngIf="commentReply?.isUserLiked === false">
+                            <button (click)="onLikeCommentReply(commentReply?.id)" mat-icon-button  aria-label="Example icon button with a heart icon">
+                              <mat-icon style="color: gray;">favorite</mat-icon>
+                            </button>
+                          </div>
+                        </td>
+                        <td> {{ commentReply?.commentReplyLikes }} </td>
+                        <td><span class="material-icons"> ios_share </span></td>
+                      </tr>
+                    </table>
+                  </div>
+                  
+                  <hr>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--  Post ends -->
+    </div>
+
+  </div>
+
+

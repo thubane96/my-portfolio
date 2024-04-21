@@ -1,0 +1,128 @@
+/* Feed css */
+
+body {
+    --twitter-color: #50b7f5;
+    --twitter-background: #e6ecf0;
+}
+  
+.feed {
+    flex: 0.5;
+    border-right: 1px solid var(--twitter-background);
+    min-width: fit-content;
+    overflow-y: scroll;
+    float: left;
+    width: 60%;
+    height: 550px;
+}
+
+.feed_header {
+  position: fixed;
+  width: 46.6%;
+  top: 0;
+  background-color: white;
+  z-index: 100;
+  border: 1px solid var(--twitter-background);
+  padding: 15px 20px;
+}
+
+.feed_header h2 {
+  font-size: 20px;
+  font-weight: 800;
+}
+   
+.feed::-webkit-scrollbar {
+    display: none
+}
+
+.feed {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.post_avatar img {
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+}
+
+.widgets_input {
+  display: flex;
+  align-items: center;
+  background-color: var(--twitter-background);
+  padding: 10px;
+  border-radius: 20px;
+  margin-top: 0px;
+  margin-left: 15px;
+  width: 450px ;
+}
+
+.widgets_input input {
+  border: none;
+  background-color: var(--twitter-background);
+  outline: none;
+  font-size: 20px;
+  padding-left: 50px;
+  width: 400px;
+}
+
+.messaging_box {
+    position: fixed;
+    bottom: 10px;
+    width: 40%;
+}
+
+.image-upload>input {
+    display: none;
+}
+
+
+/* Chat containers */
+.container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  width: 55%;
+}
+
+/* Darker chat container */
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+/* Clear floats */
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Style images */
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+/* Style the right image */
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+/* Style time text */
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+/* Style time text */
+.time-left {
+  float: left;
+  color: #999;
+}
